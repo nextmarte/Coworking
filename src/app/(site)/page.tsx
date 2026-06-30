@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { RegistrationForm } from "@/components/registration-form";
 import { Patrocinadores } from "@/components/patrocinadores";
+import { SocialLinks } from "@/components/social-links";
 
 export default function Home() {
   return (
@@ -22,7 +23,7 @@ export default function Home() {
                 <span className="text-brand-100/80">— CSMG</span>
               </p>
               <p className="text-xs text-brand-100/80">
-                Instituto Virtual Internacional de Mudanças Globais (IVIG)
+                Prefeitura e SEIM/Integrário · Oroborus
               </p>
             </div>
           </div>
@@ -37,11 +38,12 @@ export default function Home() {
               Inscrições abertas
             </span>
             <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-              Capacitação online, gratuita e para toda a comunidade.
+              Capacitação online e gratuita para empreendedores.
             </h1>
             <p className="mt-5 max-w-lg text-base text-brand-100/90 sm:text-lg">
-              Uma iniciativa IVIG para ampliar o acesso ao conhecimento.
-              Inscreva-se em poucos minutos e estude de onde estiver.
+              Uma iniciativa da Prefeitura e SEIM/Integrário · Oroborus para
+              ampliar o acesso ao empreendedorismo. Inscreva-se em poucos minutos
+              e estude de onde estiver.
             </p>
 
             <ul className="mt-8 grid gap-3 text-sm text-brand-100/90 sm:grid-cols-2">
@@ -49,7 +51,7 @@ export default function Home() {
                 <Dot /> Cursos 100% online
               </li>
               <li className="flex items-start gap-2">
-                <Dot /> Certificado de participação
+                <Dot /> Declaração de participação
               </li>
               <li className="flex items-start gap-2">
                 <Dot /> Conteúdo de qualidade
@@ -58,6 +60,13 @@ export default function Home() {
                 <Dot /> Sem custo para o aluno
               </li>
             </ul>
+
+            <p className="mt-8 max-w-lg rounded-xl bg-white/10 p-4 text-sm text-brand-100/90 ring-1 ring-white/15">
+              <span className="font-semibold text-white">Para quem é: </span>
+              jovens e adultos empreendedores de 15 a 65 anos,
+              microempreendedores individuais (MEIs) e autônomos moradores de
+              municípios da Região Metropolitana do Rio de Janeiro.
+            </p>
           </div>
 
           <div className="lg:pl-4">
@@ -69,12 +78,20 @@ export default function Home() {
       <Patrocinadores />
 
       <footer className="border-t border-brand-100 bg-white">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-brand-900/60 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} Coworking Social de Mudanças Globais
-            (CSMG) · Instituto Virtual Internacional de Mudanças Globais (IVIG)
-          </p>
-          <p>Dúvidas? Entre em contato pelos nossos canais oficiais.</p>
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+            <p className="text-sm font-semibold text-brand-900">
+              Siga o Coworking Integrário
+            </p>
+            <SocialLinks />
+          </div>
+          <div className="flex flex-col gap-2 border-t border-brand-100 pt-4 text-xs text-brand-900/60 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {new Date().getFullYear()} Coworking Social de Mudanças Globais
+              (CSMG) · Prefeitura e Oroborus
+            </p>
+            <p>Dúvidas? Fale conosco pelo WhatsApp (21) 99090-2912.</p>
+          </div>
         </div>
       </footer>
     </main>

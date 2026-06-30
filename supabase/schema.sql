@@ -1,4 +1,4 @@
--- Schema inicial da plataforma de educação
+-- Schema inicial da plataforma de capacitação
 -- Execute este SQL no SQL Editor do Supabase (https://supabase.com/dashboard/project/_/sql)
 
 create table if not exists public.inscricoes (

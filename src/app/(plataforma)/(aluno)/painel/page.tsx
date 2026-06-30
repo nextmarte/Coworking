@@ -27,7 +27,7 @@ export default async function PainelPage() {
       <h1 className="text-2xl font-bold text-brand-900">Minhas mentorias</h1>
       <p className="mt-1 text-sm text-slate-500">
         10 mentorias temáticas · 20 horas de formação. Conclua 70% do conteúdo
-        para emitir seu certificado.
+        para emitir sua declaração de participação.
       </p>
 
       {modulos && modulos.length > 0 ? (

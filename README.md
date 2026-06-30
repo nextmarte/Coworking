@@ -1,4 +1,4 @@
-# Plataforma de Educação — CSMG
+# Plataforma de Capacitação — CSMG
 
 Ambiente Virtual de Aprendizagem (AVA) do **Coworking Social de Mudanças
 Globais (CSMG)**. Duas áreas no mesmo projeto Next.js, que sobem juntas para a
@@ -98,6 +98,6 @@ supabase/
 - [ ] Marcar alunos selecionados (`update inscricoes set selecionado = true ...`)
 - [ ] Integrar player Cloudflare Stream na página da mentoria (`/mentorias/[slug]`)
 - [ ] Telas de quiz (correção via `corrigir_quiz`) e materiais
-- [ ] Cálculo dos 70% + emissão de certificado
+- [ ] Cálculo dos 70% + emissão da declaração de participação
 - [ ] Painel administrativo de conteúdo e seleção
 ```
