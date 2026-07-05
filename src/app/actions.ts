@@ -3,6 +3,7 @@
 import { getSupabase } from "@/lib/supabase";
 import { isValidCPF, unmaskCPF } from "@/lib/cpf";
 import { isValidPhone, unmaskPhone } from "@/lib/phone";
+import { enviarEmailConfirmacaoInscricao } from "@/lib/email";
 
 export type RegistrationPayload = {
   nome: string;
@@ -61,6 +62,16 @@ export async function registerInscription(
       ok: false,
       error: "Não foi possível concluir a inscrição. Tente novamente.",
     };
+  }
+
+  try {
+    await enviarEmailConfirmacaoInscricao({
+      nome,
+      email,
+      matricula: matricula as string,
+    });
+  } catch (emailError) {
+    console.error("Falha ao enviar e-mail de confirmação de inscrição:", emailError);
   }
 
   return { ok: true, matricula: matricula as string };
