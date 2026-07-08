@@ -222,6 +222,32 @@ export async function criarAula(formData: FormData) {
   revalidatePath(`/master/disciplinas/${disciplinaId}`);
 }
 
+export async function atualizarAula(formData: FormData) {
+  await exigirMaster();
+  const admin = createSupabaseAdminClient();
+
+  const id = String(formData.get("id") ?? "");
+  const disciplinaId = String(formData.get("disciplina_id") ?? "");
+  const titulo = String(formData.get("titulo") ?? "").trim();
+  if (!id || !titulo) return;
+
+  const { provider, uid } = classificarVideo(
+    String(formData.get("video_link") ?? ""),
+  );
+
+  await admin
+    .from("aulas")
+    .update({
+      titulo,
+      descricao: String(formData.get("descricao") ?? "").trim() || null,
+      provider,
+      video_uid: uid,
+    })
+    .eq("id", id);
+
+  revalidatePath(`/master/disciplinas/${disciplinaId}`);
+}
+
 export async function excluirAula(formData: FormData) {
   await exigirMaster();
   const admin = createSupabaseAdminClient();
@@ -255,6 +281,28 @@ export async function criarMaterial(formData: FormData) {
     url,
     ordem,
   });
+
+  revalidatePath(`/master/disciplinas/${disciplinaId}`);
+}
+
+export async function atualizarMaterial(formData: FormData) {
+  await exigirMaster();
+  const admin = createSupabaseAdminClient();
+
+  const id = String(formData.get("id") ?? "");
+  const disciplinaId = String(formData.get("disciplina_id") ?? "");
+  const titulo = String(formData.get("titulo") ?? "").trim();
+  const url = String(formData.get("url") ?? "").trim();
+  if (!id || !titulo || !url) return;
+
+  await admin
+    .from("materiais")
+    .update({
+      titulo,
+      tipo: String(formData.get("tipo") ?? "pdf").trim() || "pdf",
+      url,
+    })
+    .eq("id", id);
 
   revalidatePath(`/master/disciplinas/${disciplinaId}`);
 }
@@ -337,6 +385,42 @@ export async function criarPergunta(formData: FormData) {
   await admin.from("quiz_alternativas").insert(
     alternativas.map((a, i) => ({
       pergunta_id: pergunta.id,
+      texto: a.texto,
+      correta: a.letra === correta,
+      ordem: i + 1,
+    })),
+  );
+
+  revalidatePath(`/master/disciplinas/${disciplinaId}`);
+}
+
+export async function atualizarPergunta(formData: FormData) {
+  await exigirMaster();
+  const admin = createSupabaseAdminClient();
+
+  const id = String(formData.get("id") ?? "");
+  const disciplinaId = String(formData.get("disciplina_id") ?? "");
+  const enunciado = String(formData.get("enunciado") ?? "").trim();
+  const correta = String(formData.get("correta") ?? "");
+  if (!id || !enunciado || !correta) return;
+
+  const letras = ["a", "b", "c", "d", "e"];
+  const alternativas = letras
+    .map((letra) => ({
+      letra,
+      texto: String(formData.get(`alt_${letra}`) ?? "").trim(),
+    }))
+    .filter((a) => a.texto);
+
+  if (alternativas.length < 2) return;
+  if (!alternativas.some((a) => a.letra === correta)) return;
+
+  await admin.from("quiz_perguntas").update({ enunciado }).eq("id", id);
+  // Substitui as alternativas por completo (mais simples e consistente).
+  await admin.from("quiz_alternativas").delete().eq("pergunta_id", id);
+  await admin.from("quiz_alternativas").insert(
+    alternativas.map((a, i) => ({
+      pergunta_id: id,
       texto: a.texto,
       correta: a.letra === correta,
       ordem: i + 1,

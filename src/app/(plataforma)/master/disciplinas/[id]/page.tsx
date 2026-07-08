@@ -3,15 +3,19 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { exigirMaster } from "@/lib/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { LinhaEditavel } from "@/components/master/linha-editavel";
 import {
   atualizarDisciplina,
   excluirDisciplina,
   criarAula,
+  atualizarAula,
   excluirAula,
   criarMaterial,
+  atualizarMaterial,
   excluirMaterial,
   atualizarQuiz,
   criarPergunta,
+  atualizarPergunta,
   excluirPergunta,
 } from "../../actions";
 
@@ -45,7 +49,7 @@ export default async function DisciplinaMasterPage({
     await Promise.all([
       admin
         .from("aulas")
-        .select("id, titulo, provider, video_uid, ordem")
+        .select("id, titulo, descricao, provider, video_uid, ordem")
         .eq("disciplina_id", id)
         .order("ordem", { ascending: true }),
       admin
@@ -167,22 +171,62 @@ export default async function DisciplinaMasterPage({
         {aulas && aulas.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
             {aulas.map((a, i) => (
-              <li
-                key={a.id as string}
-                className="flex items-center justify-between gap-3 py-2.5"
-              >
-                <span className="min-w-0 text-sm text-slate-700">
-                  <span className="font-medium text-brand-900">
-                    {i + 1}. {a.titulo as string}
-                  </span>
-                  <span className="ml-2 text-xs text-slate-400">
-                    {a.video_uid ? (a.provider as string) : "sem vídeo"}
-                  </span>
-                </span>
-                <FormExcluir
-                  action={excluirAula}
-                  id={a.id as string}
-                  disciplinaId={disciplina.id}
+              <li key={a.id as string} className="py-2.5">
+                <LinhaEditavel
+                  resumo={
+                    <span className="text-sm text-slate-700">
+                      <span className="font-medium text-brand-900">
+                        {i + 1}. {a.titulo as string}
+                      </span>
+                      <span className="ml-2 text-xs text-slate-400">
+                        {a.video_uid ? (a.provider as string) : "sem vídeo"}
+                      </span>
+                    </span>
+                  }
+                  excluir={
+                    <FormExcluir
+                      action={excluirAula}
+                      id={a.id as string}
+                      disciplinaId={disciplina.id}
+                    />
+                  }
+                  formulario={
+                    <form
+                      action={atualizarAula}
+                      className="grid gap-2 sm:grid-cols-2"
+                    >
+                      <input type="hidden" name="id" value={a.id as string} />
+                      <input
+                        type="hidden"
+                        name="disciplina_id"
+                        value={disciplina.id}
+                      />
+                      <input
+                        name="titulo"
+                        required
+                        defaultValue={a.titulo as string}
+                        placeholder="Título da aula"
+                        className={inputClass}
+                      />
+                      <input
+                        name="video_link"
+                        defaultValue={(a.video_uid as string | null) ?? ""}
+                        placeholder="Link do vídeo (YouTube)"
+                        className={inputClass}
+                      />
+                      <input
+                        name="descricao"
+                        defaultValue={(a.descricao as string | null) ?? ""}
+                        placeholder="Descrição (opcional)"
+                        className={`sm:col-span-2 ${inputClass}`}
+                      />
+                      <div className="sm:col-span-2 flex justify-end">
+                        <button type="submit" className={btnPrimario}>
+                          Salvar aula
+                        </button>
+                      </div>
+                    </form>
+                  }
                 />
               </li>
             ))}
@@ -229,22 +273,63 @@ export default async function DisciplinaMasterPage({
         {materiais && materiais.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
             {materiais.map((m) => (
-              <li
-                key={m.id as string}
-                className="flex items-center justify-between gap-3 py-2.5"
-              >
-                <a
-                  href={m.url as string}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-w-0 truncate text-sm font-medium text-brand-700 hover:underline"
-                >
-                  {m.titulo as string}
-                </a>
-                <FormExcluir
-                  action={excluirMaterial}
-                  id={m.id as string}
-                  disciplinaId={disciplina.id}
+              <li key={m.id as string} className="py-2.5">
+                <LinhaEditavel
+                  resumo={
+                    <a
+                      href={m.url as string}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block truncate text-sm font-medium text-brand-700 hover:underline"
+                    >
+                      {m.titulo as string}
+                    </a>
+                  }
+                  excluir={
+                    <FormExcluir
+                      action={excluirMaterial}
+                      id={m.id as string}
+                      disciplinaId={disciplina.id}
+                    />
+                  }
+                  formulario={
+                    <form
+                      action={atualizarMaterial}
+                      className="grid gap-2 sm:grid-cols-4"
+                    >
+                      <input type="hidden" name="id" value={m.id as string} />
+                      <input
+                        type="hidden"
+                        name="disciplina_id"
+                        value={disciplina.id}
+                      />
+                      <input
+                        name="titulo"
+                        required
+                        defaultValue={m.titulo as string}
+                        placeholder="Título"
+                        className={`sm:col-span-2 ${inputClass}`}
+                      />
+                      <input
+                        name="tipo"
+                        defaultValue={(m.tipo as string | null) ?? "pdf"}
+                        placeholder="Tipo"
+                        className={inputClass}
+                      />
+                      <input
+                        name="url"
+                        required
+                        defaultValue={m.url as string}
+                        placeholder="URL"
+                        className={inputClass}
+                      />
+                      <div className="sm:col-span-4 flex justify-end">
+                        <button type="submit" className={btnPrimario}>
+                          Salvar material
+                        </button>
+                      </div>
+                    </form>
+                  }
                 />
               </li>
             ))}
@@ -326,31 +411,88 @@ export default async function DisciplinaMasterPage({
                 key={p.id}
                 className="rounded-lg border border-slate-200 p-4"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <p className="font-medium text-brand-900">
-                    {i + 1}. {p.enunciado}
-                  </p>
-                  <FormExcluir
-                    action={excluirPergunta}
-                    id={p.id}
-                    disciplinaId={disciplina.id}
-                  />
-                </div>
-                <ul className="mt-2 space-y-1 text-sm">
-                  {p.alternativas.map((alt, j) => (
-                    <li
-                      key={alt.id}
-                      className={
-                        alt.correta
-                          ? "font-medium text-green-700"
-                          : "text-slate-600"
-                      }
-                    >
-                      {String.fromCharCode(65 + j)}) {alt.texto}
-                      {alt.correta ? " ✓" : ""}
-                    </li>
-                  ))}
-                </ul>
+                <LinhaEditavel
+                  resumo={
+                    <>
+                      <p className="font-medium text-brand-900">
+                        {i + 1}. {p.enunciado}
+                      </p>
+                      <ul className="mt-2 space-y-1 text-sm">
+                        {p.alternativas.map((alt, j) => (
+                          <li
+                            key={alt.id}
+                            className={
+                              alt.correta
+                                ? "font-medium text-green-700"
+                                : "text-slate-600"
+                            }
+                          >
+                            {String.fromCharCode(65 + j)}) {alt.texto}
+                            {alt.correta ? " ✓" : ""}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  }
+                  excluir={
+                    <FormExcluir
+                      action={excluirPergunta}
+                      id={p.id}
+                      disciplinaId={disciplina.id}
+                    />
+                  }
+                  formulario={
+                    <form action={atualizarPergunta}>
+                      <input type="hidden" name="id" value={p.id} />
+                      <input
+                        type="hidden"
+                        name="disciplina_id"
+                        value={disciplina.id}
+                      />
+                      <textarea
+                        name="enunciado"
+                        required
+                        rows={2}
+                        defaultValue={p.enunciado}
+                        className={inputClass}
+                      />
+                      <div className="mt-2 space-y-2">
+                        {letras.map((letra, k) => {
+                          const alt = p.alternativas[k];
+                          return (
+                            <div
+                              key={letra}
+                              className="flex items-center gap-3"
+                            >
+                              <label className="flex items-center gap-1.5 text-sm font-semibold text-slate-600">
+                                <input
+                                  type="radio"
+                                  name="correta"
+                                  value={letra}
+                                  defaultChecked={alt?.correta ?? false}
+                                  required={letra === "a"}
+                                  className="h-4 w-4 accent-brand-600"
+                                />
+                                {letra.toUpperCase()}
+                              </label>
+                              <input
+                                name={`alt_${letra}`}
+                                defaultValue={alt?.texto ?? ""}
+                                placeholder={`Alternativa ${letra.toUpperCase()}`}
+                                className={inputClass}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="mt-3 flex justify-end">
+                        <button type="submit" className={btnPrimario}>
+                          Salvar pergunta
+                        </button>
+                      </div>
+                    </form>
+                  }
+                />
               </li>
             ))}
           </ul>
