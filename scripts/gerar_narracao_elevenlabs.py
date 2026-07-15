@@ -70,6 +70,17 @@ NARRACAO = [
     ("master", "disciplinas",
      "Aqui estão as disciplinas do módulo. É dentro de cada uma que você "
      "cadastra as aulas, os materiais e as avaliações. Vou entrar numa."),
+    ("master", "aulas",
+     "É aqui que você adiciona as videoaulas da disciplina. É bem "
+     "simples: dá pra colar um link do vídeo ou enviar o arquivo "
+     "direto. Fácil, né?"),
+    ("master", "materiais",
+     "Nesta parte você anexa os materiais de apoio: apostilas, PDFs e "
+     "links pra os alunos baixarem e estudarem com calma."),
+    ("master", "avaliacao",
+     "E aqui você monta a avaliação final, com as perguntas e as "
+     "alternativas. O aluno precisa passar nela pra concluir a "
+     "disciplina."),
     ("master", "conhecimento",
      "E este é um recurso poderoso: a base de conhecimento. Você envia "
      "documentos aqui pra treinar o assistente de inteligência artificial "
