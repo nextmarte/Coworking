@@ -3,11 +3,17 @@ import { RegistrationForm } from "@/components/registration-form";
 import { Patrocinadores } from "@/components/patrocinadores";
 import { SocialLinks } from "@/components/social-links";
 import { TemaToggle } from "@/components/ui/tema-toggle";
+import { RodaAnimada } from "@/components/marca/roda-animada";
 
 export default function Home() {
   return (
     <main className="relative flex flex-1 flex-col">
-      <div className="relative flex flex-1 flex-col bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700">
+      <div className="relative flex flex-1 flex-col overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700">
+        {/* Roda ambiente: gira devagar ao fundo do hero, sangrando pela borda. */}
+        <RodaAnimada
+          decorativa
+          className="pointer-events-none absolute -right-20 -top-28 h-[34rem] w-[34rem] opacity-[0.12] sm:opacity-[0.16]"
+        />
         <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 pt-8 text-white">
           <div className="group flex items-center gap-3">
             <span className="flex h-12 w-12 flex-none items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/20">
