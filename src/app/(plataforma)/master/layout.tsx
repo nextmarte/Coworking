@@ -3,6 +3,7 @@ import Image from "next/image";
 import { exigirMaster } from "@/lib/auth";
 import { logout } from "@/app/(plataforma)/actions";
 import { TemaToggle } from "@/components/ui/tema-toggle";
+import { SomToggle } from "@/components/ui/som-toggle";
 import { BotaoTour } from "@/components/tour/botao-tour";
 import { ContextoIAProvider } from "@/components/ava/contexto-ia";
 import { AssistenteFlutuante } from "@/components/ava/assistente-flutuante";
@@ -40,6 +41,7 @@ export default async function MasterLayout({
               Ver como aluno
             </Link>
             <BotaoTour perfil="master" className="border-white/20 text-white/70 hover:text-white hover:border-white/40" />
+            <SomToggle className="border-white/20 text-white/70 hover:text-white hover:border-white/40" />
             <TemaToggle className="border-white/20 text-white/70 hover:text-white hover:border-white/40" />
             <form action={logout}>
               <button

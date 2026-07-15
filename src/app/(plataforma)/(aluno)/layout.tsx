@@ -4,6 +4,7 @@ import { exigirAluno, getPapel } from "@/lib/auth";
 import { logout } from "@/app/(plataforma)/actions";
 import { Patrocinadores } from "@/components/patrocinadores";
 import { TemaToggle } from "@/components/ui/tema-toggle";
+import { SomToggle } from "@/components/ui/som-toggle";
 import { ContextoIAProvider } from "@/components/ava/contexto-ia";
 import { AssistenteFlutuante } from "@/components/ava/assistente-flutuante";
 import { BotaoTour } from "@/components/tour/botao-tour";
@@ -55,6 +56,7 @@ export default async function AlunoLayout({
               Olá, {primeiroNome}
             </span>
             <BotaoTour perfil="aluno" />
+            <SomToggle />
             <TemaToggle />
             <form action={logout}>
               <button

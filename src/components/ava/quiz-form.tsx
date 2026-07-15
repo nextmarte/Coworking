@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import {
   submeterQuiz,
   type QuizState,
 } from "@/app/(plataforma)/(aluno)/actions";
+import { tocarConquista } from "@/lib/som/sons";
 
 type Alternativa = { id: string; texto: string };
 type Pergunta = { id: string; enunciado: string; alternativas: Alternativa[] };
@@ -22,6 +23,12 @@ export function QuizForm({
     submeterQuiz,
     undefined,
   );
+
+  // Som de conquista ao ser aprovado (respeita a preferência do aluno).
+  const aprovadoAgora = Boolean(state && "nota" in state && state.aprovado);
+  useEffect(() => {
+    if (aprovadoAgora) tocarConquista();
+  }, [aprovadoAgora]);
 
   // Resultado da correção → tela de resultado.
   if (state && "nota" in state) {
