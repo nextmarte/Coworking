@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useChatIA } from "./use-chat-ia";
 import { useContextoIA } from "./contexto-ia";
+import { RodaSpinner } from "@/components/marca/roda-spinner";
 
 /**
  * Assistente de IA disponível em todas as telas autenticadas: botão flutuante
@@ -56,13 +57,18 @@ export function AssistenteFlutuante() {
         >
           <div className="flex items-center justify-between gap-3 border-b border-slate-100 bg-brand-600 px-4 py-3">
             <div>
-              <h2 className="font-display text-sm font-bold text-white">
+              <h2 className="flex items-center gap-2 font-display text-sm font-bold text-white">
                 Assistente CSMG
+                {carregando ? (
+                  <RodaSpinner className="h-4 w-4 text-white/80" />
+                ) : null}
               </h2>
               <p className="mt-0.5 text-xs text-white/75">
-                {disciplina
-                  ? `Contexto: ${disciplina.titulo}`
-                  : "Dúvidas do conteúdo e da plataforma"}
+                {carregando
+                  ? "Pensando…"
+                  : disciplina
+                    ? `Contexto: ${disciplina.titulo}`
+                    : "Dúvidas do conteúdo e da plataforma"}
               </p>
             </div>
             <button

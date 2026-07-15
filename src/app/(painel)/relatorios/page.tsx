@@ -6,6 +6,7 @@ import { AuthShell } from "@/components/auth/auth-shell";
 import { SenhaForm } from "@/components/painel/senha-form";
 import { GraficoEvolucao } from "@/components/painel/grafico-evolucao";
 import { TemaToggle } from "@/components/ui/tema-toggle";
+import { Contador } from "@/components/ui/contador";
 
 export const metadata: Metadata = {
   title: "Painel de inscrições — CSMG",
@@ -39,9 +40,10 @@ function Cartao({
   return (
     <div className="rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
       <p className="text-sm font-medium text-slate-500">{rotulo}</p>
-      <p className="mt-2 font-display text-3xl font-bold text-brand-900 dark:text-brand-100">
-        {valor.toLocaleString("pt-BR")}
-      </p>
+      <Contador
+        valor={valor}
+        className="mt-2 block font-display text-3xl font-bold text-brand-900 dark:text-brand-100"
+      />
       {detalhe ? <p className="mt-1 text-xs text-slate-400">{detalhe}</p> : null}
     </div>
   );

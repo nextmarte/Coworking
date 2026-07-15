@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { registerInscription, type RegistrationPayload } from "@/app/actions";
 import { maskCPF } from "@/lib/cpf";
 import { maskPhone } from "@/lib/phone";
+import { RodaSpinner } from "@/components/marca/roda-spinner";
 
 type FieldKey = keyof RegistrationPayload;
 
@@ -139,9 +140,16 @@ export function RegistrationForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="mt-7 inline-flex w-full items-center justify-center rounded-lg bg-brand-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-brand-600 dark:hover:bg-brand-500"
+        className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-brand-600 dark:hover:bg-brand-500"
       >
-        {isPending ? "Enviando..." : "Quero me inscrever"}
+        {isPending ? (
+          <>
+            <RodaSpinner className="h-4 w-4" />
+            Enviando…
+          </>
+        ) : (
+          "Quero me inscrever"
+        )}
       </button>
 
       <p className="mt-4 text-center text-xs text-brand-800/60 dark:text-brand-100/60">

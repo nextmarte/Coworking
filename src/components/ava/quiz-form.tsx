@@ -34,6 +34,32 @@ export function QuizForm({
   if (state && "nota" in state) {
     return (
       <div className="animate-surgir rounded-xl border border-slate-200 bg-superficie p-6 text-center shadow-sm">
+        {/* Selo com o ícone que se desenha: ✓ aprovado, ✗ reprovado. */}
+        <span
+          className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full ${
+            state.aprovado ? "bg-green-50" : "bg-red-50"
+          }`}
+        >
+          <svg
+            viewBox="0 0 52 52"
+            className={`h-9 w-9 ${state.aprovado ? "text-green-700" : "text-red-700"}`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            {state.aprovado ? (
+              <path d="M14 27l8 8 16-18" className="quiz-traco" />
+            ) : (
+              <>
+                <path d="M18 18l16 16" className="quiz-traco" />
+                <path d="M34 18l-16 16" className="quiz-traco quiz-traco-2" />
+              </>
+            )}
+          </svg>
+        </span>
         <p className="text-sm text-slate-500">Sua nota</p>
         <p className="mt-1 font-display text-4xl font-bold text-brand-900 dark:text-brand-100">
           {state.nota.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%

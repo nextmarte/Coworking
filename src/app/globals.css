@@ -127,6 +127,20 @@
   50% { opacity: 1; }
 }
 
+/* Traço que se "desenha" (ex.: ✓/✗ do resultado do quiz). */
+.quiz-traco {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: desenhar-traco 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+.quiz-traco-2 {
+  animation-delay: 0.22s;
+}
+
+@keyframes desenhar-traco {
+  to { stroke-dashoffset: 0; }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

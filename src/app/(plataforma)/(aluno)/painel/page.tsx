@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getProgressoCurso, resumo } from "@/lib/progresso";
 import { BarraProgresso } from "@/components/ui/barra-progresso";
+import { Contador } from "@/components/ui/contador";
 import { ModulosVazio } from "@/components/ilustracoes";
 
 export const metadata: Metadata = {
@@ -133,9 +134,11 @@ function ProgressoGeralCard({
     >
       <div className="flex items-center justify-between gap-4">
         <h2 className="font-semibold text-brand-900 dark:text-brand-100">Progresso geral</h2>
-        <span className="font-display text-2xl font-bold text-brand-900 dark:text-brand-100">
-          {geral.pct}%
-        </span>
+        <Contador
+          valor={geral.pct}
+          sufixo="%"
+          className="font-display text-2xl font-bold text-brand-900 dark:text-brand-100"
+        />
       </div>
       <div className="mt-3">
         <BarraProgresso pct={geral.pct} />
