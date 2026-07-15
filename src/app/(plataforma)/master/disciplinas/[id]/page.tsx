@@ -196,7 +196,7 @@ export default async function DisciplinaMasterPage({
       </section>
 
       {/* Aulas */}
-      <section className={cardClass}>
+      <section className={cardClass} data-tour="master-aulas">
         <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Aulas (vídeo)</h2>
         {aulas && aulas.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
@@ -326,7 +326,7 @@ export default async function DisciplinaMasterPage({
       </section>
 
       {/* Materiais */}
-      <section className={cardClass}>
+      <section className={cardClass} data-tour="master-materiais">
         <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Materiais</h2>
         {materiais && materiais.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
@@ -585,7 +585,7 @@ export default async function DisciplinaMasterPage({
       </section>
 
       {/* Avaliação */}
-      <section className={cardClass}>
+      <section className={cardClass} data-tour="master-avaliacao">
         <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Avaliação final</h2>
 
         <form

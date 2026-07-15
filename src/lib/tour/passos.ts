@@ -102,8 +102,29 @@ const TOURS: Record<PerfilTour, PassoTour[]> = {
       audio: "/tour/master/disciplinas.mp3",
     },
     {
-      seletor: "master-conhecimento",
+      seletor: "master-aulas",
       linkDe: "master-disciplinas",
+      titulo: "Aulas",
+      descricao:
+        "É aqui que você adiciona as videoaulas da disciplina, colando um link ou enviando um arquivo.",
+      audio: "/tour/master/aulas.mp3",
+    },
+    {
+      seletor: "master-materiais",
+      titulo: "Materiais",
+      descricao:
+        "Anexe apostilas, PDFs e links de apoio para os alunos baixarem.",
+      audio: "/tour/master/materiais.mp3",
+    },
+    {
+      seletor: "master-avaliacao",
+      titulo: "Avaliação final",
+      descricao:
+        "Monte a avaliação com perguntas e alternativas; o aluno precisa passar para concluir.",
+      audio: "/tour/master/avaliacao.mp3",
+    },
+    {
+      seletor: "master-conhecimento",
       titulo: "Base de conhecimento da IA",
       descricao:
         "Envie documentos aqui para treinar o assistente de IA daquela disciplina.",

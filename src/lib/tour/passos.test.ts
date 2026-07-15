@@ -19,6 +19,22 @@ describe("passos do tour", () => {
     expect(todosOsPassos("master")[0].seletor).toBeUndefined();
   });
 
+  it("o tour master explora aulas, materiais e avaliação da disciplina", () => {
+    const seletores = todosOsPassos("master").map((p) => p.seletor);
+    expect(seletores).toContain("master-aulas");
+    expect(seletores).toContain("master-materiais");
+    expect(seletores).toContain("master-avaliacao");
+    // O primeiro passo na página da disciplina navega a partir das disciplinas.
+    const passos = todosOsPassos("master");
+    const aulas = passos.find((p) => p.seletor === "master-aulas");
+    expect(aulas?.linkDe).toBe("master-disciplinas");
+    // Ordem: aulas → materiais → avaliação → conhecimento.
+    const idx = (s: string) => seletores.indexOf(s);
+    expect(idx("master-aulas")).toBeLessThan(idx("master-materiais"));
+    expect(idx("master-materiais")).toBeLessThan(idx("master-avaliacao"));
+    expect(idx("master-avaliacao")).toBeLessThan(idx("master-conhecimento"));
+  });
+
   it("sem nada na tela, sobra só o passo central", () => {
     const passos = passosDoTour("aluno", () => false, () => false);
     expect(passos).toHaveLength(1);
