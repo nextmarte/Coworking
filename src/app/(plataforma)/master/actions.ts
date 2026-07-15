@@ -12,6 +12,7 @@ import {
   chaveOriginal,
   urlUploadOriginal,
 } from "@/lib/r2";
+import { classificarVideo, resolverVideoAoAtualizar } from "@/lib/video";
 
 /**
  * Reconstrói o índice do assistente de IA da disciplina. Best-effort: uma falha
@@ -93,24 +94,6 @@ async function proximaOrdem(
   return ((data?.ordem as number | undefined) ?? 0) + 1;
 }
 
-/** Detecta o provedor de vídeo a partir do link (ou ID) colado pelo master. */
-function classificarVideo(link: string): { provider: string; uid: string | null } {
-  const v = link.trim();
-  if (!v) return { provider: "youtube", uid: null };
-  // YouTube: link (watch/youtu.be/shorts/embed) — guarda o link inteiro; o
-  // player extrai o ID de 11 caracteres na hora de montar o embed.
-  if (/youtube\.com|youtu\.be/.test(v)) return { provider: "youtube", uid: v };
-  // Cloudflare Stream: URL de embed/watch ou UID (32 caracteres hexadecimais).
-  if (/cloudflarestream\.com|videodelivery\.net/.test(v)) {
-    const m = v.match(/[0-9a-f]{32}/i);
-    return { provider: "cloudflare", uid: m ? m[0] : v };
-  }
-  if (/^[0-9a-f]{32}$/i.test(v)) return { provider: "cloudflare", uid: v };
-  // Outra URL http(s): tratada como embed genérico.
-  if (/^https?:\/\//.test(v)) return { provider: "url", uid: v };
-  // Sem esquema e curto: provável ID de vídeo do YouTube (11 caracteres).
-  return { provider: "youtube", uid: v };
-}
 
 // ─── módulos ─────────────────────────────────────────────────────────────────
 export async function criarModulo(formData: FormData) {
@@ -297,8 +280,17 @@ export async function atualizarAula(formData: FormData) {
   const titulo = String(formData.get("titulo") ?? "").trim();
   if (!id || !titulo) return;
 
-  const { provider, uid } = classificarVideo(
+  // Link vazio não pode apagar um vídeo hospedado (r2) — o campo de link
+  // fica em branco nessas aulas e "salvar" não significa "remover o vídeo".
+  const { data: atual } = await admin
+    .from("aulas")
+    .select("provider, video_uid")
+    .eq("id", id)
+    .maybeSingle();
+  const { provider, video_uid } = resolverVideoAoAtualizar(
     String(formData.get("video_link") ?? ""),
+    (atual as { provider: string; video_uid: string | null } | null) ??
+      undefined,
   );
 
   await admin
@@ -307,7 +299,7 @@ export async function atualizarAula(formData: FormData) {
       titulo,
       descricao: String(formData.get("descricao") ?? "").trim() || null,
       provider,
-      video_uid: uid,
+      video_uid,
     })
     .eq("id", id);
 
