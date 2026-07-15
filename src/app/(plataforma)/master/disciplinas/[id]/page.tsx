@@ -7,11 +7,11 @@ import { LinhaEditavel } from "@/components/master/linha-editavel";
 import { BlocoAdicionar } from "@/components/master/bloco-adicionar";
 import { BotaoEnviar } from "@/components/master/botao-enviar";
 import { UploadVideo } from "@/components/master/upload-video";
+import { AdicionarAula } from "@/components/master/adicionar-aula";
 import { ConhecimentoVazio } from "@/components/ilustracoes";
 import {
   atualizarDisciplina,
   excluirDisciplina,
-  criarAula,
   atualizarAula,
   excluirAula,
   criarMaterial,
@@ -290,40 +290,7 @@ export default async function DisciplinaMasterPage({
         )}
 
         <BlocoAdicionar rotulo="Adicionar aula">
-          <form action={criarAula} className="grid gap-3 sm:grid-cols-2">
-            <input type="hidden" name="disciplina_id" value={disciplina.id} />
-            <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
-                Título da aula
-              </label>
-              <input name="titulo" required className={inputClass} />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
-                Link do vídeo (YouTube ou Cloudflare)
-              </label>
-              <input
-                name="video_link"
-                placeholder="https://youtu.be/… ou UID do Cloudflare"
-                className={inputClass}
-              />
-              <p className="mt-1 text-xs text-slate-400">
-                Cole o link do YouTube — o aluno assiste embutido na plataforma,
-                sem sair. Também aceita UID/URL do Cloudflare Stream.
-              </p>
-            </div>
-            <div className="sm:col-span-2">
-              <label className="mb-1 block text-sm font-medium text-slate-700">
-                Descrição (opcional)
-              </label>
-              <input name="descricao" className={inputClass} />
-            </div>
-            <div className="sm:col-span-2 flex justify-end">
-              <button type="submit" className={btnPrimario}>
-                Adicionar aula
-              </button>
-            </div>
-          </form>
+          <AdicionarAula disciplinaId={disciplina.id} />
         </BlocoAdicionar>
       </section>
 

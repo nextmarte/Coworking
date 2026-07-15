@@ -253,6 +253,41 @@ export async function criarAula(formData: FormData) {
   revalidatePath(`/master/disciplinas/${disciplinaId}`);
 }
 
+/**
+ * Cria uma aula e retorna o id — usado pelo formulário client de adicionar
+ * aula, que pode em seguida enviar um arquivo de vídeo para essa aula.
+ */
+export async function criarAulaComId(
+  disciplinaId: string,
+  titulo: string,
+  descricao: string,
+  link: string,
+): Promise<{ id: string } | { erro: string }> {
+  await exigirMaster();
+  const admin = createSupabaseAdminClient();
+  if (!disciplinaId || !titulo.trim()) return { erro: "Informe o título da aula." };
+
+  const { provider, uid } = classificarVideo(link);
+  const ordem = await proximaOrdem(admin, "aulas", "disciplina_id", disciplinaId);
+  const { data, error } = await admin
+    .from("aulas")
+    .insert({
+      disciplina_id: disciplinaId,
+      titulo: titulo.trim(),
+      descricao: descricao.trim() || null,
+      provider,
+      video_uid: uid,
+      ordem,
+    })
+    .select("id")
+    .single();
+  if (error || !data) return { erro: "Não foi possível criar a aula." };
+
+  await reindexarIA(admin, disciplinaId);
+  revalidatePath(`/master/disciplinas/${disciplinaId}`);
+  return { id: data.id as string };
+}
+
 export async function atualizarAula(formData: FormData) {
   await exigirMaster();
   const admin = createSupabaseAdminClient();

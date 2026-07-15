@@ -1,10 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {
-  finalizarUploadVideo,
-  iniciarUploadVideo,
-} from "@/app/(plataforma)/master/actions";
+import { enviarVideo } from "@/lib/video-upload";
 import { BarraProgresso } from "@/components/ui/barra-progresso";
 
 type Estado = "ocioso" | "enviando" | "processando" | "erro";
@@ -32,39 +29,12 @@ export function UploadVideo({
     setEstado("enviando");
     setPct(0);
     setMsg(null);
-
-    const inicio = await iniciarUploadVideo(
-      aulaId,
-      arquivo.name,
-      arquivo.type || "video/mp4",
-    );
-    if ("erro" in inicio) {
+    const r = await enviarVideo(aulaId, disciplinaId, arquivo, setPct);
+    if ("erro" in r) {
       setEstado("erro");
-      setMsg(inicio.erro);
+      setMsg(r.erro);
       return;
     }
-
-    // PUT direto no R2 com progresso (XHR).
-    await new Promise<void>((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("PUT", inicio.url);
-      xhr.setRequestHeader("Content-Type", arquivo.type || "video/mp4");
-      xhr.upload.onprogress = (e) => {
-        if (e.lengthComputable) setPct(Math.round((e.loaded / e.total) * 100));
-      };
-      xhr.onload = () =>
-        xhr.status >= 200 && xhr.status < 300
-          ? resolve()
-          : reject(new Error(`R2 respondeu ${xhr.status}`));
-      xhr.onerror = () => reject(new Error("Falha de rede no envio."));
-      xhr.send(arquivo);
-    }).catch((e) => {
-      setEstado("erro");
-      setMsg(e instanceof Error ? e.message : "Falha no envio.");
-      throw e;
-    });
-
-    await finalizarUploadVideo(aulaId, inicio.chave, disciplinaId);
     setEstado("processando");
   }
 
