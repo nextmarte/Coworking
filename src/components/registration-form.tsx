@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { registerInscription, type RegistrationPayload } from "@/app/actions";
 import { maskCPF } from "@/lib/cpf";
 import { maskPhone } from "@/lib/phone";
+import { extrairOrigem, type Origem } from "@/lib/origem";
 import { RodaSpinner } from "@/components/marca/roda-spinner";
 
 type FieldKey = keyof RegistrationPayload;
@@ -15,8 +16,36 @@ const initialValues: RegistrationPayload = {
   telefone: "",
 };
 
+// Guarda a origem na sessão: quem chega pelo anúncio e navega antes de
+// preencher o formulário não perde as UTMs da URL.
+const CHAVE_ORIGEM = "csmg-origem";
+
+function capturarOrigem(): Origem {
+  const daUrl = extrairOrigem(
+    new URLSearchParams(window.location.search),
+    document.referrer,
+    window.location.hostname,
+  );
+  try {
+    if (daUrl.source || daUrl.medium || daUrl.campaign) {
+      sessionStorage.setItem(CHAVE_ORIGEM, JSON.stringify(daUrl));
+      return daUrl;
+    }
+    const salva = sessionStorage.getItem(CHAVE_ORIGEM);
+    if (salva) return JSON.parse(salva) as Origem;
+  } catch {
+    // sessionStorage indisponível (modo privado etc.) — segue sem persistir
+  }
+  return daUrl;
+}
+
 export function RegistrationForm() {
   const [values, setValues] = useState<RegistrationPayload>(initialValues);
+
+  // Persiste as UTMs assim que a página abre; a leitura acontece no submit.
+  useEffect(() => {
+    capturarOrigem();
+  }, []);
   const [fieldError, setFieldError] = useState<{ field?: FieldKey; message: string } | null>(null);
   const [matricula, setMatricula] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -35,7 +64,10 @@ export function RegistrationForm() {
     setMatricula(null);
 
     startTransition(async () => {
-      const result = await registerInscription(values);
+      const result = await registerInscription({
+        ...values,
+        origem: capturarOrigem(),
+      });
       if (result.ok) {
         setMatricula(result.matricula);
         setValues(initialValues);
