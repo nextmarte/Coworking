@@ -20,7 +20,7 @@ export function BlocoAdicionar({
       <button
         type="button"
         onClick={() => setAberto(true)}
-        className="mt-4 w-full rounded-lg border border-dashed border-slate-300 px-4 py-2.5 text-sm font-medium text-brand-600 transition hover:border-brand-300 hover:bg-brand-50"
+        className="mt-4 w-full rounded-lg border border-dashed border-slate-300 px-4 py-2.5 text-sm font-medium text-brand-600 transition hover:border-brand-300 hover:bg-brand-50 active:scale-[0.98] dark:text-brand-300 dark:hover:bg-brand-900/40"
       >
         + {rotulo}
       </button>

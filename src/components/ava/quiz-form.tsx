@@ -26,9 +26,9 @@ export function QuizForm({
   // Resultado da correção → tela de resultado.
   if (state && "nota" in state) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-superficie p-6 text-center shadow-sm">
+      <div className="animate-surgir rounded-xl border border-slate-200 bg-superficie p-6 text-center shadow-sm">
         <p className="text-sm text-slate-500">Sua nota</p>
-        <p className="mt-1 text-4xl font-bold text-brand-900 dark:text-brand-100">
+        <p className="mt-1 font-display text-4xl font-bold text-brand-900 dark:text-brand-100">
           {state.nota.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
         </p>
         <span
@@ -57,7 +57,7 @@ export function QuizForm({
   }
 
   return (
-    <form action={action} className="space-y-6">
+    <form action={action} className="space-y-6" data-tour="avaliacao">
       <input type="hidden" name="quizId" value={quizId} />
 
       {perguntas.map((pergunta, i) => (
@@ -77,7 +77,7 @@ export function QuizForm({
             {pergunta.alternativas.map((alt, j) => (
               <label
                 key={alt.id}
-                className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50 has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50"
+                className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50 has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 dark:has-[:checked]:bg-brand-900/40"
               >
                 <input
                   type="radio"
@@ -105,7 +105,7 @@ export function QuizForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60"
+        className="w-full rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[0.98] disabled:opacity-60"
       >
         {pending ? "Corrigindo…" : "Enviar respostas"}
       </button>

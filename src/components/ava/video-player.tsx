@@ -19,7 +19,10 @@ export function VideoPlayer({
 
   if (!src) {
     return (
-      <div className="flex aspect-video w-full items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50">
+      <div
+        data-tour="video"
+        className="flex aspect-video w-full items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50"
+      >
         <div className="text-center">
           <p className="text-sm font-medium text-slate-700">
             Vídeo em preparação
@@ -33,7 +36,10 @@ export function VideoPlayer({
   }
 
   return (
-    <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
+    <div
+      data-tour="video"
+      className="aspect-video w-full overflow-hidden rounded-xl bg-black ring-1 ring-black/5 dark:ring-white/10"
+    >
       <iframe
         src={src}
         title={titulo}

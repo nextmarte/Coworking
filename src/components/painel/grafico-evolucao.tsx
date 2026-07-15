@@ -17,7 +17,7 @@ export function GraficoEvolucao({ serie }: { serie: PontoSerie[] }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
       <div className="flex items-baseline justify-between">
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Evolução das inscrições</h2>
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Evolução das inscrições</h2>
         <span className="text-sm text-slate-500">
           {totalPeriodo} nos últimos {serie.length} dias
         </span>
@@ -37,7 +37,7 @@ export function GraficoEvolucao({ serie }: { serie: PontoSerie[] }) {
                 style={{ height: "100%" }}
               >
                 <div
-                  className="w-full rounded-t bg-brand-500 transition group-hover:bg-brand-600"
+                  className="w-full rounded-t bg-brand-500 transition-[height,background-color] duration-500 group-hover:bg-brand-600"
                   style={{
                     height: `${Math.max((ponto.total / maximo) * 100, ponto.total > 0 ? 4 : 0)}%`,
                   }}

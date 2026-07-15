@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { exigirMaster } from "@/lib/auth";
 import { logout } from "@/app/(plataforma)/actions";
+import { TemaToggle } from "@/components/ui/tema-toggle";
 
 export default async function MasterLayout({
   children,
@@ -13,7 +15,14 @@ export default async function MasterLayout({
     <div className="flex min-h-full flex-1 flex-col bg-background">
       <header className="border-b border-slate-200 bg-brand-900 text-white">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-3">
-          <Link href="/master" className="flex items-center gap-2 text-sm font-semibold">
+          <Link href="/master" className="flex items-center gap-2.5 text-sm font-semibold">
+            <Image
+              src="/logo-roda.svg"
+              alt="Logo do CSMG — a Roda"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
             CSMG
             <span className="rounded bg-white/15 px-2 py-0.5 text-xs font-medium">
               Área do Master
@@ -26,6 +35,7 @@ export default async function MasterLayout({
             >
               Ver como aluno
             </Link>
+            <TemaToggle className="border-white/20 text-white/70 hover:text-white hover:border-white/40" />
             <form action={logout}>
               <button
                 type="submit"

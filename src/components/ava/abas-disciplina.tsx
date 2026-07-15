@@ -30,6 +30,7 @@ export function AbasDisciplina({
     <div>
       <div
         role="tablist"
+        data-tour="abas"
         className="flex gap-1 overflow-x-auto border-b border-slate-200"
       >
         {abas.map((aba) => {
@@ -41,7 +42,7 @@ export function AbasDisciplina({
               aria-selected={ativo}
               type="button"
               onClick={() => setAtiva(aba.id)}
-              className={`-mb-px whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition ${
+              className={`-mb-px whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
                 ativo
                   ? "border-brand-600 text-brand-900 dark:text-brand-100"
                   : "border-transparent text-slate-500 hover:text-slate-700"
@@ -58,7 +59,8 @@ export function AbasDisciplina({
         })}
       </div>
 
-      <div className="mt-6">
+      {/* key={ativa} remonta o painel a cada troca, reexecutando a animação. */}
+      <div key={ativa} className="animate-aparecer mt-6">
         {ativa === "aulas" ? aulas : null}
         {ativa === "materiais" ? materiais : null}
         {ativa === "avaliacao" ? avaliacao : null}

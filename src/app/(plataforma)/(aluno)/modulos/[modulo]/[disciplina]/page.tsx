@@ -160,7 +160,7 @@ export default async function DisciplinaPage({
               rel="noopener noreferrer"
               className="flex items-center gap-3 rounded-lg border border-slate-200 bg-superficie px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-brand-300"
             >
-              <span className="rounded bg-brand-50 px-2 py-0.5 text-xs font-semibold uppercase text-brand-600">
+              <span className="rounded bg-brand-50 px-2 py-0.5 text-xs font-semibold uppercase text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
                 {(m.tipo as string) ?? "arquivo"}
               </span>
               {m.titulo as string}
@@ -185,7 +185,7 @@ export default async function DisciplinaPage({
   ) : (
     <div>
       <div className="mb-4">
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">{quiz.titulo as string}</h2>
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">{quiz.titulo as string}</h2>
         <p className="mt-0.5 text-sm text-slate-500">
           Nota mínima para aprovação: {quiz.nota_minima}%.
           {ultimaTentativa
@@ -205,7 +205,7 @@ export default async function DisciplinaPage({
   );
 
   return (
-    <div>
+    <div className="animate-aparecer">
       <Link
         href={`/modulos/${moduloSlug}`}
         className="text-sm text-brand-600 transition hover:text-brand-700"
@@ -213,7 +213,7 @@ export default async function DisciplinaPage({
         ← {modulo.titulo}
       </Link>
 
-      <h1 className="mt-3 text-2xl font-bold text-brand-900 dark:text-brand-100">
+      <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
         {disciplina.titulo}
       </h1>
       {disciplina.descricao ? (

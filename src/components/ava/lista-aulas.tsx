@@ -31,7 +31,7 @@ export function ListaAulas({
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="escalonado space-y-3" data-tour="aulas">
       {aulas.map((aula, i) => {
         const expandida = aberta === aula.id;
         return (
@@ -49,7 +49,7 @@ export function ListaAulas({
                 className={`flex h-9 w-9 flex-none items-center justify-center rounded-full text-sm font-semibold ${
                   aula.jaAssistida
                     ? "bg-green-100 text-green-700"
-                    : "bg-brand-50 text-brand-600"
+                    : "bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300"
                 }`}
               >
                 {aula.jaAssistida ? "✓" : i + 1}

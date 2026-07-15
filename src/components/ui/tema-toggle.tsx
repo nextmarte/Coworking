@@ -1,29 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+// A classe `dark` no <html> é a fonte da verdade do tema; o script
+// anti-flash do root layout a define antes da primeira pintura e o toggle
+// notifica os assinantes ao alterá-la.
+const assinantes = new Set<() => void>();
+
+function assinar(cb: () => void) {
+  assinantes.add(cb);
+  return () => assinantes.delete(cb);
+}
+
+function lerTema() {
+  return document.documentElement.classList.contains("dark");
+}
 
 /**
- * Alterna entre tema claro e escuro. A classe `dark` vive no <html> e a
- * escolha persiste em localStorage ("csmg-tema") — o script anti-flash do
- * root layout a reaplica antes da primeira pintura.
+ * Alterna entre tema claro e escuro. A escolha persiste em localStorage
+ * ("csmg-tema") — o script anti-flash do root layout a reaplica no load.
  */
 export function TemaToggle({ className = "" }: { className?: string }) {
-  const [escuro, setEscuro] = useState(false);
-
-  // Sincroniza com o estado real do <html> após a hidratação.
-  useEffect(() => {
-    setEscuro(document.documentElement.classList.contains("dark"));
-  }, []);
+  // No servidor renderiza como claro; o cliente lê a classe real do <html>.
+  const escuro = useSyncExternalStore(assinar, lerTema, () => false);
 
   function alternar() {
     const novo = !escuro;
-    setEscuro(novo);
     document.documentElement.classList.toggle("dark", novo);
     try {
       localStorage.setItem("csmg-tema", novo ? "escuro" : "claro");
     } catch {
       /* navegação privada sem storage: só não persiste */
     }
+    assinantes.forEach((cb) => cb());
   }
 
   return (

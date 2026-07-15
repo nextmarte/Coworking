@@ -46,29 +46,29 @@ export function RegistrationForm() {
 
   if (matricula) {
     return (
-      <div className="rounded-2xl border border-brand-200 bg-superficie p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-brand-900 dark:text-brand-100">
+      <div className="animate-escalar rounded-2xl border border-brand-200 bg-superficie p-8 shadow-sm dark:border-brand-700">
+        <h2 className="font-display text-2xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
           Inscrição recebida!
         </h2>
-        <p className="mt-3 text-brand-800/80">
+        <p className="mt-3 text-brand-800/80 dark:text-brand-100/80">
           Em breve você receberá no seu e-mail os próximos passos para acessar
           os cursos.
         </p>
-        <div className="mt-6 rounded-xl border border-brand-100 bg-brand-50/60 p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-brand-800/70">
+        <div className="mt-6 rounded-xl border border-brand-100 bg-brand-50/60 p-4 dark:border-brand-700 dark:bg-brand-900/40">
+          <p className="text-xs font-medium uppercase tracking-wide text-brand-800/70 dark:text-brand-100/70">
             Seu número de matrícula
           </p>
-          <p className="mt-1 font-mono text-2xl font-semibold tracking-wider text-brand-900 dark:text-brand-100">
+          <p className="mt-2 inline-block rounded-lg bg-ambar-100/60 px-3 py-2 font-display text-2xl font-bold tracking-wide text-brand-900 dark:bg-brand-800 dark:text-brand-100">
             {matricula}
           </p>
-          <p className="mt-2 text-xs text-brand-800/70">
+          <p className="mt-2 text-xs text-brand-800/70 dark:text-brand-100/70">
             Guarde este número: ele identifica você na plataforma.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setMatricula(null)}
-          className="mt-6 text-sm font-medium text-brand-700 underline-offset-4 hover:underline"
+          className="mt-6 text-sm font-medium text-brand-700 underline-offset-4 transition hover:underline dark:text-brand-300"
         >
           Fazer outra inscrição
         </button>
@@ -80,12 +80,12 @@ export function RegistrationForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-2xl border border-brand-100 bg-superficie p-6 shadow-sm sm:p-8"
+      className="rounded-2xl border border-brand-100 bg-superficie p-6 shadow-sm dark:border-brand-800 sm:p-8"
     >
-      <h2 className="text-xl font-semibold text-brand-900 dark:text-brand-100 sm:text-2xl">
+      <h2 className="font-display text-xl font-bold tracking-tight text-brand-900 dark:text-brand-100 sm:text-2xl">
         Faça sua inscrição
       </h2>
-      <p className="mt-1 text-sm text-brand-800/70">
+      <p className="mt-1 text-sm text-brand-800/70 dark:text-brand-100/70">
         Preencha seus dados para garantir acesso gratuito à plataforma.
       </p>
 
@@ -139,12 +139,12 @@ export function RegistrationForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="mt-7 inline-flex w-full items-center justify-center rounded-lg bg-brand-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-7 inline-flex w-full items-center justify-center rounded-lg bg-brand-800 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-brand-600 dark:hover:bg-brand-500"
       >
         {isPending ? "Enviando..." : "Quero me inscrever"}
       </button>
 
-      <p className="mt-4 text-center text-xs text-brand-800/60">
+      <p className="mt-4 text-center text-xs text-brand-800/60 dark:text-brand-100/60">
         Seus dados são tratados conforme a LGPD.
       </p>
     </form>
@@ -193,10 +193,10 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`w-full rounded-lg border bg-superficie px-3.5 py-2.5 text-sm text-brand-900 dark:text-brand-100 placeholder:text-brand-900/30 focus:outline-none focus:ring-2 ${
+        className={`w-full rounded-lg border bg-superficie px-3.5 py-2.5 text-sm text-brand-900 transition placeholder:text-brand-900/30 focus:outline-none focus:ring-2 dark:text-brand-100 dark:placeholder:text-brand-100/30 ${
           error
             ? "border-red-400 focus:ring-red-200"
-            : "border-brand-100 focus:border-brand-500 focus:ring-brand-200"
+            : "border-brand-100 focus:border-brand-500 focus:ring-brand-200 dark:border-brand-700"
         }`}
       />
       {error && (

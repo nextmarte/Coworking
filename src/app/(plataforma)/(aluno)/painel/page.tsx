@@ -56,8 +56,10 @@ export default async function PainelPage() {
   const temModulos = modulos && modulos.length > 0;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-brand-900 dark:text-brand-100">Meus módulos</h1>
+    <div className="animate-aparecer">
+      <h1 className="font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
+        Meus módulos
+      </h1>
       <p className="mt-1 text-sm text-slate-500">
         Acompanhe aqui o seu avanço nas mentorias, disciplinas e avaliações.
       </p>
@@ -66,7 +68,7 @@ export default async function PainelPage() {
       <ProgressoGeralCard progresso={progressoCurso} />
 
       {temModulos ? (
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+        <ul className="escalonado mt-8 grid gap-4 sm:grid-cols-2" data-tour="modulos">
           {modulos.map((modulo) => {
             const p = porModulo.get(modulo.id) ?? { total: 0, feitas: 0 };
             const r = resumo(p.feitas, p.total);
@@ -74,7 +76,7 @@ export default async function PainelPage() {
               <li key={modulo.id}>
                 <Link
                   href={`/modulos/${modulo.slug}`}
-                  className="block h-full rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm transition hover:border-brand-300 hover:shadow-md"
+                  className="block h-full rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
                 >
                   <h2 className="font-semibold text-brand-900 dark:text-brand-100">
                     {modulo.titulo}
@@ -123,10 +125,15 @@ function ProgressoGeralCard({
   const { aulas, quizzesAprovados, quizzesTotal, geral } = progresso;
 
   return (
-    <div className="mt-6 rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
+    <div
+      className="mt-6 rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm"
+      data-tour="progresso"
+    >
       <div className="flex items-center justify-between gap-4">
         <h2 className="font-semibold text-brand-900 dark:text-brand-100">Progresso geral</h2>
-        <span className="text-2xl font-bold text-brand-900 dark:text-brand-100">{geral.pct}%</span>
+        <span className="font-display text-2xl font-bold text-brand-900 dark:text-brand-100">
+          {geral.pct}%
+        </span>
       </div>
       <div className="mt-3">
         <BarraProgresso pct={geral.pct} />

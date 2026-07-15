@@ -30,7 +30,7 @@ const inputClass =
   "w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200";
 const cardClass = "rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm";
 const btnPrimario =
-  "rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700";
+  "rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[0.98]";
 
 type Params = { id: string };
 
@@ -136,7 +136,7 @@ export default async function DisciplinaMasterPage({
   const letras = ["a", "b", "c", "d", "e"];
 
   return (
-    <div className="space-y-8">
+    <div className="animate-aparecer space-y-8">
       <div>
         <Link
           href={`/master/modulos/${disciplina.modulo_id}`}
@@ -144,14 +144,14 @@ export default async function DisciplinaMasterPage({
         >
           ← Voltar ao módulo
         </Link>
-        <h1 className="mt-3 text-2xl font-bold text-brand-900 dark:text-brand-100">
+        <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
           {disciplina.titulo}
         </h1>
       </div>
 
       {/* Editar disciplina */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Dados da disciplina</h2>
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Dados da disciplina</h2>
         <form action={atualizarDisciplina} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input type="hidden" name="id" value={disciplina.id} />
           <div className="sm:col-span-2">
@@ -195,7 +195,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Aulas */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Aulas (vídeo)</h2>
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Aulas (vídeo)</h2>
         {aulas && aulas.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
             {aulas.map((a, i) => (
@@ -303,7 +303,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Materiais */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Materiais</h2>
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Materiais</h2>
         {materiais && materiais.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
             {materiais.map((m) => (
@@ -314,7 +314,7 @@ export default async function DisciplinaMasterPage({
                       href={m.url as string}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block truncate text-sm font-medium text-brand-700 hover:underline"
+                      className="block truncate text-sm font-medium text-brand-700 hover:underline dark:text-brand-300"
                     >
                       {m.titulo as string}
                     </a>
@@ -403,8 +403,8 @@ export default async function DisciplinaMasterPage({
       </section>
 
       {/* Base de conhecimento da IA */}
-      <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">
+      <section className={cardClass} data-tour="master-conhecimento">
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">
           Base de conhecimento da IA
         </h2>
         <p className="mt-1 text-sm text-slate-500">
@@ -433,7 +433,7 @@ export default async function DisciplinaMasterPage({
                               href={urlPorPath.get(k.arquivo_path as string)}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="truncate text-brand-700 hover:underline"
+                              className="truncate text-brand-700 hover:underline dark:text-brand-300"
                             >
                               {k.arquivo_nome as string}
                             </a>
@@ -488,7 +488,7 @@ export default async function DisciplinaMasterPage({
                           type="file"
                           name="arquivo"
                           accept=".pdf,.docx,.xlsx,.txt,.md,.csv"
-                          className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-700 hover:file:bg-brand-100"
+                          className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-700 transition hover:file:bg-brand-100 dark:file:bg-brand-900/40 dark:file:text-brand-300 dark:hover:file:bg-brand-900/60"
                         />
                       </div>
                       <div className="flex justify-end">
@@ -530,7 +530,7 @@ export default async function DisciplinaMasterPage({
                 type="file"
                 name="arquivo"
                 accept=".pdf,.docx,.xlsx,.txt,.md,.csv"
-                className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-700 hover:file:bg-brand-100"
+                className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-700 transition hover:file:bg-brand-100 dark:file:bg-brand-900/40 dark:file:text-brand-300 dark:hover:file:bg-brand-900/60"
               />
               <p className="mt-1 text-xs text-slate-400">
                 PDF, DOCX, XLSX, TXT, MD ou CSV (até 20 MB). PDFs escaneados
@@ -559,7 +559,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Avaliação */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Avaliação final</h2>
+        <h2 className="font-display font-semibold text-brand-900 dark:text-brand-100">Avaliação final</h2>
 
         <form
           action={atualizarQuiz}
@@ -596,7 +596,7 @@ export default async function DisciplinaMasterPage({
 
         {/* Perguntas existentes */}
         {perguntas && perguntas.length > 0 ? (
-          <ul className="mt-6 space-y-3">
+          <ul className="escalonado mt-6 space-y-3">
             {perguntas.map((p, i) => (
               <li
                 key={p.id}

@@ -21,7 +21,7 @@ export function BotaoEnviar({
     <button
       type="submit"
       disabled={pending}
-      className={className}
+      className={`transition active:scale-[0.98] disabled:opacity-60 ${className ?? ""}`}
       aria-busy={pending}
     >
       {pending ? pendente : children}
