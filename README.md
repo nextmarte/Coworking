@@ -76,6 +76,8 @@ O projeto segue **TDD** (veja `AGENTS.md`):
 npm test            # unitários (Vitest) — src/**/*.test.ts[x]
 npm run test:watch  # modo watch, para o ciclo red → green → refactor
 npm run test:e2e    # E2E (Playwright) — e2e/*.spec.ts, sobe o dev server se preciso
+                    # ATENÇÃO: escreve no banco do .env.local (dados marcados
+                    # e2e-*@example.com, apagados no teardown automático)
 ```
 
 ## Variáveis de ambiente
