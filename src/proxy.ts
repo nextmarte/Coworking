@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { bloquearRotaNaLanding } from "@/lib/lancamento";
+
 // Rotas da área do aluno (exigem login). A inscrição pública ("/") fica de fora.
 const ROTAS_PROTEGIDAS = ["/painel", "/modulos", "/master"];
 // Rotas de entrada: usuário já logado não precisa vê-las.
@@ -11,6 +13,23 @@ const ROTAS_DE_AUTH = ["/login", "/primeiro-acesso"];
  * requisição e barra acesso não autenticado à área do aluno.
  */
 export async function proxy(request: NextRequest) {
+  // Pré-lançamento: no domínio principal, rota de plataforma volta pra landing.
+  // Atrás do nginx, o domínio de verdade vem no header Host (nextUrl.hostname
+  // reflete o bind local do next start).
+  const host =
+    request.headers.get("host")?.split(":")[0] ?? request.nextUrl.hostname;
+  if (
+    bloquearRotaNaLanding(host, request.nextUrl.pathname, {
+      DOMINIO_LANDING: process.env.DOMINIO_LANDING,
+      PLATAFORMA_LIBERADA: process.env.PLATAFORMA_LIBERADA,
+    })
+  ) {
+    const redirect = request.nextUrl.clone();
+    redirect.pathname = "/";
+    redirect.search = "";
+    return NextResponse.redirect(redirect);
+  }
+
   let response = NextResponse.next({ request });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
