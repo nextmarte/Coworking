@@ -19,13 +19,32 @@ groups_, que sobem juntas para a Vercel:
 ## Stack
 
 - **Next.js 16** (App Router, TypeScript, `proxy.ts`)
-- **Tailwind CSS 4**
+- **Tailwind CSS 4** — design system próprio (paleta da marca, **tema
+  claro/escuro**, tipografia Bricolage Grotesque + Figtree, micro-animações)
 - **Supabase** (Postgres + Auth + Storage via `@supabase/ssr`, modelo RLS-first)
 - **IA**: Ollama Cloud (chat com RAG por full-text do Postgres; upload de
-  PDF/DOCX/XLSX/TXT/MD/CSV como base de conhecimento — unpdf/mammoth/exceljs)
+  PDF/DOCX/XLSX/TXT/MD/CSV como base de conhecimento — unpdf/mammoth/exceljs).
+  **Assistente flutuante** disponível em todas as telas autenticadas.
+- **Tour guiado**: driver.js + narração em voz (ElevenLabs) — passeio
+  automático e multi-página que abre no primeiro acesso.
 - **E-mail**: Nodemailer + Gmail SMTP (confirmação de inscrição)
 - **Testes**: Vitest (unit) + Playwright (E2E)
 - Deploy: Vercel (via GitHub)
+
+## Experiência (redesign)
+
+- **Identidade visual própria** — a *Roda* CSMG (releitura vetorial do
+  logotipo) em SVG, favicons e OG image geradas em código; ilustrações
+  originais para estados vazios/404.
+- **Tema claro/escuro** com alternância no header (persistido, sem flash).
+- **Assistente de IA flutuante** (canto inferior direito) em toda a área
+  autenticada; dentro de uma disciplina responde no contexto dela, fora dela
+  atua em modo geral.
+- **Tour guiado com narração** (voz feminina pt-BR): abre automaticamente no
+  primeiro acesso, avança sozinho e percorre módulo → disciplina → recursos.
+- **Micro-animações** sóbrias (Roda animada no hero, count-up, spinner da
+  marca, feedback ✓/✗ do quiz) e **feedback sonoro** opcional em conquistas.
+- Tudo respeita `prefers-reduced-motion` e mantém contraste AA.
 
 ## Rodando localmente
 
@@ -38,7 +57,7 @@ cp .env.local.example .env.local
 # preencha com as chaves do Supabase e demais segredos (tabela abaixo)
 
 # 3. Aplicar o schema no Supabase (SQL Editor, em ordem)
-#   schema.sql e depois supabase/migrations/0001 ... 0009
+#   schema.sql e depois supabase/migrations/0001 ... 0010
 
 # 4. Rodar dev server
 npm run dev
@@ -69,9 +88,12 @@ npm run test:e2e    # E2E (Playwright) — e2e/*.spec.ts, sobe o dev server se p
 | `OLLAMA_MODEL` | **só servidor** | modelo de chat (padrão `gpt-oss:20b`) |
 | `OLLAMA_BASE_URL` | **só servidor** | padrão `https://ollama.com` (nuvem) |
 | `OLLAMA_THINK` | **só servidor** | `"true"` liga o modo raciocínio |
+| `ELEVENLABS_API_KEY` | **offline** | só para regerar a narração do tour (não é lida em runtime) |
 
-Configure todas também na Vercel (Project Settings → Environment Variables).
-O `.env.local.example` traz o modelo comentado.
+Configure as de runtime também na Vercel (Project Settings → Environment
+Variables). O `.env.local.example` traz o modelo comentado. Os áudios do tour
+já vêm prontos em `public/tour/`; para regerá-los, veja
+`scripts/gerar_narracao_elevenlabs.py`.
 
 ## Estrutura
 
@@ -95,14 +117,24 @@ src/
 │   │       ├── actions.ts            # CRUD de conteúdo + base de conhecimento
 │   │       ├── modulos/[id]/ · disciplinas/[id]/
 │   │       └── page.tsx
-│   └── api/ia/chat/route.ts          # chat IA (streaming, RAG por disciplina)
+│   ├── api/ia/chat/route.ts          # chat IA (streaming; RAG por disciplina ou geral)
+│   ├── layout.tsx · globals.css      # fontes, tema, tokens e keyframes
+│   ├── icon.svg · favicon.ico · apple-icon.png · opengraph-image.tsx
+│   └── not-found.tsx                 # 404 com ilustração
 ├── components/                       # auth/ · ava/ · master/ · painel/ · ui/
+│   ├── ava/                          # abas, aulas, quiz, chat-ia, assistente-flutuante, useChatIA
+│   ├── tour/                         # botao-tour (driver.js) + tour.css
+│   ├── marca/                        # roda-animada · roda-spinner
+│   ├── ilustracoes/                  # spot-illustrations dos estados vazios/404
+│   └── ui/                           # barra-progresso · contador · tema-toggle · som-toggle
 ├── lib/
 │   ├── auth.ts · painel-auth.ts      # DAL de sessão + gate do painel
 │   ├── cpf.ts · phone.ts (+ testes)  # helpers puros
 │   ├── email.ts · metricas.ts · progresso.ts
 │   ├── ia/                           # chunking · conhecimento · extrair-texto
 │   ├── ollama.ts                     # cliente Ollama Cloud (streaming)
+│   ├── som/                          # sons de conquista (Web Audio) + preferência
+│   ├── tour/                         # passos do tour por perfil
 │   └── supabase/                     # server.ts · client.ts · admin.ts (+ supabase.ts anon)
 └── proxy.ts                          # renova sessão + protege rotas autenticadas
 
@@ -118,7 +150,8 @@ supabase/
     ├── 0006_seed_demo.sql            # conteúdo de demonstração
     ├── 0007_fix_alternativas_publicas.sql  # alternativas visíveis sem o gabarito
     ├── 0008_ia_chat.sql              # conhecimento, chunks (tsvector) e log da IA
-    └── 0009_conhecimento_arquivos.sql # bucket privado p/ arquivos da base
+    ├── 0009_conhecimento_arquivos.sql # bucket privado p/ arquivos da base
+    └── 0010_busca_geral.sql          # RPC buscar_chunks_geral (assistente global)
 ```
 
 ## Como o aluno entra

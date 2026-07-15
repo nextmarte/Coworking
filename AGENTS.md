@@ -107,6 +107,33 @@ Colaboradores sem escrita no repositório trabalham em fork + branch + PR para
 logout) · `(aluno)/actions.ts` (progresso, quiz) · `master/actions.ts` (CRUD de
 conteúdo + base de conhecimento) · `(painel)/actions.ts` (senha do painel).
 
+### UX / design system
+
+- **Tema**: tokens semânticos em `globals.css` com par claro/escuro; dark mode
+  por classe `.dark` (variante `dark:`) e `@custom-variant`. A escala `slate`
+  é revestida no escuro; superfícies usam o token `bg-superficie` (nunca
+  `bg-white` sólido). Toggle `TemaToggle` (useSyncExternalStore) + script
+  anti-flash no root layout.
+- **Tipografia**: Figtree (corpo) + Bricolage Grotesque (`font-display`), via
+  `next/font`.
+- **Motion**: keyframes utilitários (`animate-surgir/aparecer/escalar`,
+  `.escalonado`, `animate-girar-roda`), sempre sob `prefers-reduced-motion`.
+  `RodaSpinner` (loading), `Contador` (count-up), traço ✓/✗ do quiz.
+- **Assistente flutuante**: `AssistenteFlutuante` + hook `useChatIA` +
+  `ContextoIA` (registra a disciplina atual). Rota `api/ia/chat` aceita
+  `disciplinaId` opcional (modo geral usa `buscar_chunks_geral`, migration 0010).
+- **Tour guiado**: `components/tour/botao-tour.tsx` (driver.js) roda os passos
+  de `lib/tour/passos.ts` por perfil; navega entre páginas seguindo `linkDe`
+  (o 1º link do contêiner) e troca abas via `data-aba`. Marque elementos com
+  `data-tour="..."` e listas navegáveis com `data-conteudo` (o tour prioriza
+  itens com conteúdo). Narração em `public/tour/` (voz ElevenLabs; regerar com
+  `scripts/gerar_narracao_elevenlabs.py`, chave em `ELEVENLABS_API_KEY`).
+- **Som**: `lib/som/sons.ts` sintetiza feedback de conquista (Web Audio, sem
+  arquivos); só em marcos reais (aula concluída, avaliação aprovada), atrás do
+  `SomToggle` (desligado por padrão). Nunca em navegação/erro.
+- **Ilustrações**: `components/ilustracoes/` — SVG inline, herdam o tema via
+  `currentColor`; usadas em estados vazios e no 404.
+
 ## Convenções
 
 - **Tudo em pt-BR**: comentários, nomes de arquivos, funções, variáveis,
