@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getProgressoCurso, resumo } from "@/lib/progresso";
 import { BarraProgresso } from "@/components/ui/barra-progresso";
+import { ModulosVazio } from "@/components/ilustracoes";
 
 export const metadata: Metadata = {
   title: "Meu painel — CSMG",
@@ -103,11 +104,12 @@ export default async function PainelPage() {
           })}
         </ul>
       ) : (
-        <div className="mt-8 rounded-xl border border-dashed border-slate-300 bg-superficie p-8 text-center">
-          <p className="text-sm font-medium text-slate-700">
+        <div className="mt-8 flex flex-col items-center rounded-xl border border-dashed border-slate-300 bg-superficie p-10 text-center">
+          <ModulosVazio className="h-36 w-auto text-slate-300" />
+          <p className="mt-4 text-sm font-medium text-slate-700">
             Os módulos estão sendo preparados.
           </p>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 max-w-sm text-sm text-slate-500">
             O conteúdo em vídeo, os materiais e as avaliações aparecerão aqui
             assim que forem publicados.
           </p>

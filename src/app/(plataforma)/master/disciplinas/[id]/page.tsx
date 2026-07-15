@@ -6,6 +6,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { LinhaEditavel } from "@/components/master/linha-editavel";
 import { BlocoAdicionar } from "@/components/master/bloco-adicionar";
 import { BotaoEnviar } from "@/components/master/botao-enviar";
+import { ConhecimentoVazio } from "@/components/ilustracoes";
 import {
   atualizarDisciplina,
   excluirDisciplina,
@@ -503,10 +504,13 @@ export default async function DisciplinaMasterPage({
             ))}
           </ul>
         ) : (
-          <p className="mt-3 text-sm text-slate-500">
-            Nenhum conteúdo cadastrado. Sem material, o assistente responderá que
-            não há conteúdo sobre a pergunta.
-          </p>
+          <div className="mt-3 flex flex-col items-center rounded-lg border border-dashed border-slate-300 p-6 text-center">
+            <ConhecimentoVazio className="h-28 w-auto text-slate-300" />
+            <p className="mt-3 max-w-sm text-sm text-slate-500">
+              Nenhum conteúdo cadastrado. Sem material, o assistente responderá
+              que não há conteúdo sobre a pergunta.
+            </p>
+          </div>
         )}
 
         <BlocoAdicionar rotulo="Adicionar conteúdo">
