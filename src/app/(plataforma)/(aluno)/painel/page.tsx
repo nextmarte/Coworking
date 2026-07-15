@@ -57,7 +57,7 @@ export default async function PainelPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-brand-900">Meus módulos</h1>
+      <h1 className="text-2xl font-bold text-brand-900 dark:text-brand-100">Meus módulos</h1>
       <p className="mt-1 text-sm text-slate-500">
         Acompanhe aqui o seu avanço nas mentorias, disciplinas e avaliações.
       </p>
@@ -74,9 +74,9 @@ export default async function PainelPage() {
               <li key={modulo.id}>
                 <Link
                   href={`/modulos/${modulo.slug}`}
-                  className="block h-full rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-brand-300 hover:shadow-md"
+                  className="block h-full rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm transition hover:border-brand-300 hover:shadow-md"
                 >
-                  <h2 className="font-semibold text-brand-900">
+                  <h2 className="font-semibold text-brand-900 dark:text-brand-100">
                     {modulo.titulo}
                   </h2>
                   {modulo.instrutor ? (
@@ -101,7 +101,7 @@ export default async function PainelPage() {
           })}
         </ul>
       ) : (
-        <div className="mt-8 rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
+        <div className="mt-8 rounded-xl border border-dashed border-slate-300 bg-superficie p-8 text-center">
           <p className="text-sm font-medium text-slate-700">
             Os módulos estão sendo preparados.
           </p>
@@ -123,10 +123,10 @@ function ProgressoGeralCard({
   const { aulas, quizzesAprovados, quizzesTotal, geral } = progresso;
 
   return (
-    <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="mt-6 rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="font-semibold text-brand-900">Progresso geral</h2>
-        <span className="text-2xl font-bold text-brand-900">{geral.pct}%</span>
+        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Progresso geral</h2>
+        <span className="text-2xl font-bold text-brand-900 dark:text-brand-100">{geral.pct}%</span>
       </div>
       <div className="mt-3">
         <BarraProgresso pct={geral.pct} />

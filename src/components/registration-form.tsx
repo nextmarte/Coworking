@@ -46,8 +46,8 @@ export function RegistrationForm() {
 
   if (matricula) {
     return (
-      <div className="rounded-2xl border border-brand-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-brand-900">
+      <div className="rounded-2xl border border-brand-200 bg-superficie p-8 shadow-sm">
+        <h2 className="text-2xl font-semibold text-brand-900 dark:text-brand-100">
           Inscrição recebida!
         </h2>
         <p className="mt-3 text-brand-800/80">
@@ -58,7 +58,7 @@ export function RegistrationForm() {
           <p className="text-xs font-medium uppercase tracking-wide text-brand-800/70">
             Seu número de matrícula
           </p>
-          <p className="mt-1 font-mono text-2xl font-semibold tracking-wider text-brand-900">
+          <p className="mt-1 font-mono text-2xl font-semibold tracking-wider text-brand-900 dark:text-brand-100">
             {matricula}
           </p>
           <p className="mt-2 text-xs text-brand-800/70">
@@ -80,9 +80,9 @@ export function RegistrationForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-2xl border border-brand-100 bg-white p-6 shadow-sm sm:p-8"
+      className="rounded-2xl border border-brand-100 bg-superficie p-6 shadow-sm sm:p-8"
     >
-      <h2 className="text-xl font-semibold text-brand-900 sm:text-2xl">
+      <h2 className="text-xl font-semibold text-brand-900 dark:text-brand-100 sm:text-2xl">
         Faça sua inscrição
       </h2>
       <p className="mt-1 text-sm text-brand-800/70">
@@ -178,7 +178,7 @@ function Field({
     <div>
       <label
         htmlFor={id}
-        className="mb-1.5 block text-sm font-medium text-brand-900"
+        className="mb-1.5 block text-sm font-medium text-brand-900 dark:text-brand-100"
       >
         {label}
       </label>
@@ -193,7 +193,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-brand-900 placeholder:text-brand-900/30 focus:outline-none focus:ring-2 ${
+        className={`w-full rounded-lg border bg-superficie px-3.5 py-2.5 text-sm text-brand-900 dark:text-brand-100 placeholder:text-brand-900/30 focus:outline-none focus:ring-2 ${
           error
             ? "border-red-400 focus:ring-red-200"
             : "border-brand-100 focus:border-brand-500 focus:ring-brand-200"

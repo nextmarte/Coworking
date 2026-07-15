@@ -24,7 +24,7 @@ export function ListaAulas({
 
   if (aulas.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">
+      <p className="rounded-xl border border-dashed border-slate-300 bg-superficie p-6 text-center text-sm text-slate-500">
         As videoaulas desta disciplina estão sendo preparadas.
       </p>
     );
@@ -37,7 +37,7 @@ export function ListaAulas({
         return (
           <li
             key={aula.id}
-            className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+            className="overflow-hidden rounded-xl border border-slate-200 bg-superficie shadow-sm"
           >
             <button
               type="button"
@@ -55,7 +55,7 @@ export function ListaAulas({
                 {aula.jaAssistida ? "✓" : i + 1}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-brand-900">
+                <span className="block font-semibold text-brand-900 dark:text-brand-100">
                   {aula.titulo}
                 </span>
                 {aula.descricao ? (

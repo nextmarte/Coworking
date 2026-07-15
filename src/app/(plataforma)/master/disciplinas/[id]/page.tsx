@@ -28,7 +28,7 @@ export const metadata: Metadata = { title: "Editar disciplina — CSMG" };
 
 const inputClass =
   "w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200";
-const cardClass = "rounded-xl border border-slate-200 bg-white p-5 shadow-sm";
+const cardClass = "rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm";
 const btnPrimario =
   "rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700";
 
@@ -144,14 +144,14 @@ export default async function DisciplinaMasterPage({
         >
           ← Voltar ao módulo
         </Link>
-        <h1 className="mt-3 text-2xl font-bold text-brand-900">
+        <h1 className="mt-3 text-2xl font-bold text-brand-900 dark:text-brand-100">
           {disciplina.titulo}
         </h1>
       </div>
 
       {/* Editar disciplina */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900">Dados da disciplina</h2>
+        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Dados da disciplina</h2>
         <form action={atualizarDisciplina} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input type="hidden" name="id" value={disciplina.id} />
           <div className="sm:col-span-2">
@@ -195,7 +195,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Aulas */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900">Aulas (vídeo)</h2>
+        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Aulas (vídeo)</h2>
         {aulas && aulas.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
             {aulas.map((a, i) => (
@@ -203,7 +203,7 @@ export default async function DisciplinaMasterPage({
                 <LinhaEditavel
                   resumo={
                     <span className="text-sm text-slate-700">
-                      <span className="font-medium text-brand-900">
+                      <span className="font-medium text-brand-900 dark:text-brand-100">
                         {i + 1}. {a.titulo as string}
                       </span>
                       <span className="ml-2 text-xs text-slate-400">
@@ -303,7 +303,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Materiais */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900">Materiais</h2>
+        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Materiais</h2>
         {materiais && materiais.length > 0 ? (
           <ul className="mt-3 divide-y divide-slate-100">
             {materiais.map((m) => (
@@ -404,7 +404,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Base de conhecimento da IA */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900">
+        <h2 className="font-semibold text-brand-900 dark:text-brand-100">
           Base de conhecimento da IA
         </h2>
         <p className="mt-1 text-sm text-slate-500">
@@ -422,7 +422,7 @@ export default async function DisciplinaMasterPage({
                 <LinhaEditavel
                   resumo={
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-brand-900">
+                      <p className="truncate text-sm font-medium text-brand-900 dark:text-brand-100">
                         {k.titulo as string}
                       </p>
                       {k.arquivo_nome ? (
@@ -559,7 +559,7 @@ export default async function DisciplinaMasterPage({
 
       {/* Avaliação */}
       <section className={cardClass}>
-        <h2 className="font-semibold text-brand-900">Avaliação final</h2>
+        <h2 className="font-semibold text-brand-900 dark:text-brand-100">Avaliação final</h2>
 
         <form
           action={atualizarQuiz}
@@ -605,7 +605,7 @@ export default async function DisciplinaMasterPage({
                 <LinhaEditavel
                   resumo={
                     <>
-                      <p className="font-medium text-brand-900">
+                      <p className="font-medium text-brand-900 dark:text-brand-100">
                         {i + 1}. {p.enunciado}
                       </p>
                       <ul className="mt-2 space-y-1 text-sm">

@@ -47,7 +47,7 @@ export default async function ModuloMasterPage({
         ← Módulos
       </Link>
 
-      <h1 className="mt-3 text-2xl font-bold text-brand-900">{modulo.titulo}</h1>
+      <h1 className="mt-3 text-2xl font-bold text-brand-900 dark:text-brand-100">{modulo.titulo}</h1>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_320px]">
         {/* Disciplinas */}
@@ -61,9 +61,9 @@ export default async function ModuloMasterPage({
                 <li key={d.id}>
                   <Link
                     href={`/master/disciplinas/${d.id}`}
-                    className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-300 hover:shadow-md"
+                    className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-superficie p-4 shadow-sm transition hover:border-brand-300 hover:shadow-md"
                   >
-                    <h3 className="truncate font-semibold text-brand-900">
+                    <h3 className="truncate font-semibold text-brand-900 dark:text-brand-100">
                       {d.titulo}
                     </h3>
                     <span
@@ -80,13 +80,13 @@ export default async function ModuloMasterPage({
               ))}
             </ul>
           ) : (
-            <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">
+            <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-superficie p-6 text-center text-sm text-slate-500">
               Nenhuma disciplina ainda.
             </p>
           )}
 
-          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h3 className="font-semibold text-brand-900">Nova disciplina</h3>
+          <div className="mt-6 rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
+            <h3 className="font-semibold text-brand-900 dark:text-brand-100">Nova disciplina</h3>
             <form action={criarDisciplina} className="mt-4 space-y-3">
               <input type="hidden" name="modulo_id" value={modulo.id} />
               <div>
@@ -113,8 +113,8 @@ export default async function ModuloMasterPage({
 
         {/* Editar módulo */}
         <div className="space-y-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="font-semibold text-brand-900">Editar módulo</h2>
+          <div className="rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
+            <h2 className="font-semibold text-brand-900 dark:text-brand-100">Editar módulo</h2>
             <form action={atualizarModulo} className="mt-4 space-y-3">
               <input type="hidden" name="id" value={modulo.id} />
               <div>

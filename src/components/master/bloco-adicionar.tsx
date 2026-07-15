@@ -30,7 +30,7 @@ export function BlocoAdicionar({
   return (
     <div className="mt-4 rounded-lg border border-dashed border-slate-300 p-4">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-sm font-semibold text-brand-900">{rotulo}</span>
+        <span className="text-sm font-semibold text-brand-900 dark:text-brand-100">{rotulo}</span>
         <button
           type="button"
           onClick={() => setAberto(false)}

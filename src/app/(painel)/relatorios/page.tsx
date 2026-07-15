@@ -36,9 +36,9 @@ function Cartao({
   detalhe?: string;
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
       <p className="text-sm font-medium text-slate-500">{rotulo}</p>
-      <p className="mt-2 text-3xl font-bold text-brand-900">
+      <p className="mt-2 text-3xl font-bold text-brand-900 dark:text-brand-100">
         {valor.toLocaleString("pt-BR")}
       </p>
       {detalhe ? <p className="mt-1 text-xs text-slate-400">{detalhe}</p> : null}
@@ -63,10 +63,10 @@ export default async function RelatoriosPage() {
 
   return (
     <main className="flex flex-1 flex-col bg-background">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-superficie">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-3">
           <div>
-            <h1 className="text-sm font-semibold text-brand-900">
+            <h1 className="text-sm font-semibold text-brand-900 dark:text-brand-100">
               CSMG <span className="font-normal text-slate-400">· Painel</span>
             </h1>
           </div>
@@ -83,7 +83,7 @@ export default async function RelatoriosPage() {
 
       <div className="mx-auto w-full max-w-5xl flex-1 space-y-6 px-6 py-8">
         <div>
-          <h2 className="text-2xl font-bold text-brand-900">
+          <h2 className="text-2xl font-bold text-brand-900 dark:text-brand-100">
             Acompanhamento de inscrições
           </h2>
           <p className="mt-1 text-sm text-slate-500">

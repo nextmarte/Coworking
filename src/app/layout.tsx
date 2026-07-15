@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+// Tipografia da identidade: Figtree no corpo (humanista, cordial) e
+// Bricolage Grotesque nos títulos (display com personalidade).
+const figtree = Figtree({
+  variable: "--font-figtree",
+  subsets: ["latin", "latin-ext"],
   display: "swap",
 });
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin", "latin-ext"],
+  weight: ["600", "700", "800"],
+  display: "swap",
+});
+
+// Aplica o tema salvo (ou o do sistema) antes da primeira pintura — evita
+// flash de tema errado. Roda como primeiro script do body.
+const scriptTema = `(function(){try{var t=localStorage.getItem("csmg-tema");var d=t?t==="escuro":matchMedia("(prefers-color-scheme: dark)").matches;if(d)document.documentElement.classList.add("dark")}catch(e){}})()`;
 
 export const metadata: Metadata = {
   title: {
@@ -26,8 +39,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="pt-BR"
+      className={`${figtree.variable} ${bricolage.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col">
+        <script dangerouslySetInnerHTML={{ __html: scriptTema }} />
+        {children}
+      </body>
     </html>
   );
 }

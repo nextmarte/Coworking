@@ -80,7 +80,7 @@ export default async function ModuloPage({
         ← Meus módulos
       </Link>
 
-      <h1 className="mt-3 text-2xl font-bold text-brand-900">{modulo.titulo}</h1>
+      <h1 className="mt-3 text-2xl font-bold text-brand-900 dark:text-brand-100">{modulo.titulo}</h1>
       {modulo.instrutor ? (
         <p className="mt-0.5 text-sm text-slate-500">{modulo.instrutor}</p>
       ) : null}
@@ -106,13 +106,13 @@ export default async function ModuloPage({
               <li key={disciplina.id}>
                 <Link
                   href={`/modulos/${moduloSlug}/${disciplina.slug}`}
-                  className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-brand-300 hover:shadow-md"
+                  className="flex items-center gap-4 rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm transition hover:border-brand-300 hover:shadow-md"
                 >
                   <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-brand-50 text-sm font-semibold text-brand-600">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-brand-900">
+                    <h3 className="font-semibold text-brand-900 dark:text-brand-100">
                       {disciplina.titulo}
                     </h3>
                     {disciplina.descricao ? (
@@ -134,7 +134,7 @@ export default async function ModuloPage({
           })}
         </ul>
       ) : (
-        <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">
+        <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-superficie p-6 text-center text-sm text-slate-500">
           As disciplinas deste módulo estão sendo preparadas.
         </p>
       )}

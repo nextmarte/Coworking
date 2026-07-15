@@ -43,7 +43,7 @@ export function AbasDisciplina({
               onClick={() => setAtiva(aba.id)}
               className={`-mb-px whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition ${
                 ativo
-                  ? "border-brand-600 text-brand-900"
+                  ? "border-brand-600 text-brand-900 dark:text-brand-100"
                   : "border-transparent text-slate-500 hover:text-slate-700"
               }`}
             >

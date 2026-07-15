@@ -28,7 +28,7 @@ export default async function MasterHome() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-brand-900">Gerenciar conteúdo</h1>
+      <h1 className="text-2xl font-bold text-brand-900 dark:text-brand-100">Gerenciar conteúdo</h1>
       <p className="mt-1 text-sm text-slate-500">
         Crie e organize os módulos, disciplinas, aulas, materiais e avaliações do
         curso.
@@ -46,10 +46,10 @@ export default async function MasterHome() {
                 <li key={m.id}>
                   <Link
                     href={`/master/modulos/${m.id}`}
-                    className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-300 hover:shadow-md"
+                    className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-superficie p-4 shadow-sm transition hover:border-brand-300 hover:shadow-md"
                   >
                     <div className="min-w-0">
-                      <h3 className="truncate font-semibold text-brand-900">
+                      <h3 className="truncate font-semibold text-brand-900 dark:text-brand-100">
                         {m.titulo}
                       </h3>
                       {m.instrutor ? (
@@ -72,15 +72,15 @@ export default async function MasterHome() {
               ))}
             </ul>
           ) : (
-            <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">
+            <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-superficie p-6 text-center text-sm text-slate-500">
               Nenhum módulo ainda. Crie o primeiro ao lado.
             </p>
           )}
         </div>
 
         {/* Criar módulo */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="font-semibold text-brand-900">Novo módulo</h2>
+        <div className="rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm">
+          <h2 className="font-semibold text-brand-900 dark:text-brand-100">Novo módulo</h2>
           <form action={criarModulo} className="mt-4 space-y-3">
             <div>
               <label className="mb-1 block text-sm font-medium text-slate-700">

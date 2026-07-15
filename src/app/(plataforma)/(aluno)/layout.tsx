@@ -19,7 +19,7 @@ export default async function AlunoLayout({
 
   return (
     <div className="flex min-h-full flex-1 flex-col bg-background">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-superficie">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-3">
           <Link href="/painel" className="flex items-center gap-2.5">
             <Image
@@ -30,7 +30,7 @@ export default async function AlunoLayout({
               priority
               className="h-9 w-9 flex-none rounded-md object-cover ring-1 ring-black/5"
             />
-            <span className="text-sm font-semibold text-brand-900">
+            <span className="text-sm font-semibold text-brand-900 dark:text-brand-100">
               CSMG
               <span className="ml-1 font-normal text-slate-400">· AVA</span>
             </span>

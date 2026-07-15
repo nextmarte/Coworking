@@ -35,8 +35,8 @@ export function AuthShell({
           </span>
         </Link>
 
-        <div className="rounded-2xl bg-white p-7 shadow-xl ring-1 ring-black/5">
-          <h1 className="text-xl font-bold text-brand-900">{titulo}</h1>
+        <div className="rounded-2xl bg-superficie p-7 shadow-xl ring-1 ring-black/5">
+          <h1 className="text-xl font-bold text-brand-900 dark:text-brand-100">{titulo}</h1>
           <p className="mt-1 text-sm text-slate-500">{subtitulo}</p>
           <div className="mt-6">{children}</div>
         </div>

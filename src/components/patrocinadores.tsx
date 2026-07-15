@@ -8,7 +8,7 @@ import Image from "next/image";
  */
 export function Patrocinadores() {
   return (
-    <section className="border-t border-brand-100 bg-white">
+    <section className="border-t border-brand-100 bg-superficie">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-6 py-8">
         {/* 1ª linha: banner oficial "Patrocínio" (Prefeitura · Integração · integra.Rio) */}
         <Image

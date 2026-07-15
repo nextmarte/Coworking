@@ -92,9 +92,9 @@ export function ChatIA({
   }
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="flex flex-col rounded-xl border border-slate-200 bg-superficie shadow-sm">
       <div className="border-b border-slate-100 px-4 py-3">
-        <h2 className="text-sm font-semibold text-brand-900">
+        <h2 className="text-sm font-semibold text-brand-900 dark:text-brand-100">
           Assistente da disciplina
         </h2>
         <p className="mt-0.5 text-xs text-slate-500">

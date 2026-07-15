@@ -26,9 +26,9 @@ export function QuizForm({
   // Resultado da correção → tela de resultado.
   if (state && "nota" in state) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-superficie p-6 text-center shadow-sm">
         <p className="text-sm text-slate-500">Sua nota</p>
-        <p className="mt-1 text-4xl font-bold text-brand-900">
+        <p className="mt-1 text-4xl font-bold text-brand-900 dark:text-brand-100">
           {state.nota.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
         </p>
         <span
@@ -65,11 +65,11 @@ export function QuizForm({
           key={pergunta.id}
           role="group"
           aria-labelledby={`pergunta-${pergunta.id}`}
-          className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+          className="rounded-xl border border-slate-200 bg-superficie p-5 shadow-sm"
         >
           <p
             id={`pergunta-${pergunta.id}`}
-            className="text-sm font-semibold text-brand-900"
+            className="text-sm font-semibold text-brand-900 dark:text-brand-100"
           >
             {i + 1}. {pergunta.enunciado}
           </p>
