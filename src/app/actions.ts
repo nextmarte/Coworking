@@ -4,12 +4,15 @@ import { getSupabase } from "@/lib/supabase";
 import { isValidCPF, unmaskCPF } from "@/lib/cpf";
 import { isValidPhone, unmaskPhone } from "@/lib/phone";
 import { enviarEmailConfirmacaoInscricao } from "@/lib/email";
+import { sanitizarOrigem, type Origem } from "@/lib/origem";
 
 export type RegistrationPayload = {
   nome: string;
   cpf: string;
   email: string;
   telefone: string;
+  /** Origem de tráfego (UTMs) capturada na landing — opcional. */
+  origem?: Partial<Origem>;
 };
 
 export type RegistrationResult =
@@ -41,15 +44,33 @@ export async function registerInscription(
     return { ok: false, error: "Telefone inválido.", field: "telefone" };
   }
 
-  const { data: matricula, error } = await getSupabase().rpc(
-    "criar_inscricao",
-    {
+  const origem = sanitizarOrigem(data.origem);
+  const comOrigem = origem.source || origem.medium || origem.campaign;
+
+  let { data: matricula, error } = await getSupabase().rpc("criar_inscricao", {
+    p_nome: nome,
+    p_cpf: cpf,
+    p_email: email,
+    p_telefone: telefone,
+    ...(comOrigem
+      ? {
+          p_utm_source: origem.source,
+          p_utm_medium: origem.medium,
+          p_utm_campaign: origem.campaign,
+        }
+      : {}),
+  });
+
+  // Migração 0012 ainda não aplicada: a função só existe com 4 parâmetros.
+  // Refaz a chamada sem a origem pra não perder a inscrição.
+  if (error?.code === "PGRST202" && comOrigem) {
+    ({ data: matricula, error } = await getSupabase().rpc("criar_inscricao", {
       p_nome: nome,
       p_cpf: cpf,
       p_email: email,
       p_telefone: telefone,
-    },
-  );
+    }));
+  }
 
   if (error) {
     if (error.code === "23505") {

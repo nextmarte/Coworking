@@ -22,6 +22,10 @@ const bricolage = Bricolage_Grotesque({
 const scriptTema = `(function(){try{var t=localStorage.getItem("csmg-tema");var d=t?t==="escuro":matchMedia("(prefers-color-scheme: dark)").matches;if(d)document.documentElement.classList.add("dark")}catch(e){}})()`;
 
 export const metadata: Metadata = {
+  // Base das URLs absolutas de OG/Twitter; sem ela o Next assume localhost.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: {
     default:
       "CSMG — Plataforma de Capacitação · Coworking Social de Mudanças Globais",
