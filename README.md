@@ -85,6 +85,9 @@ npm run test:e2e    # E2E (Playwright) — e2e/*.spec.ts, sobe o dev server se p
 | `NEXT_PUBLIC_SUPABASE_URL` | cliente + servidor | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | cliente + servidor | chave pública (respeita RLS) |
 | `SUPABASE_SERVICE_ROLE_KEY` | **só servidor** | conta do aluno no 1º acesso, métricas, IA — nunca expor nem prefixar com `NEXT_PUBLIC_` |
+| `NEXT_PUBLIC_SITE_URL` | cliente + servidor | URL pública canônica (`metadataBase` das OG images) |
+| `DOMINIO_LANDING` | **só servidor** | domínio que serve só a landing antes do lançamento (vazio = desligado) |
+| `PLATAFORMA_LIBERADA` | **só servidor** | `"sim"` libera a plataforma no domínio principal (lida em runtime) |
 | `PAINEL_SENHA` | **só servidor** | senha única do painel `/relatorios` (cookie de 12h) |
 | `GMAIL_USER` / `GMAIL_APP_PASSWORD` | **só servidor** | envio do e-mail de confirmação (senha de app, não a da conta) |
 | `OLLAMA_API_KEY` | **só servidor** | chave do Ollama Cloud (chat de IA) |
