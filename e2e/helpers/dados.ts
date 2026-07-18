@@ -110,6 +110,36 @@ export async function criarMembroEquipe(
   }
 }
 
+/** true se a migração 0015 (fórum) já foi aplicada no banco. */
+export async function forumDisponivel(): Promise<boolean> {
+  const admin = criarAdmin();
+  // GET de verdade (HEAD não devolve o erro de tabela inexistente).
+  const { error } = await admin.from("forum_posts").select("id").limit(1);
+  return !error;
+}
+
+/**
+ * Modera um post de teste direto no banco (aprova/rejeita) — pros specs que
+ * não são sobre a moderação em si não dependerem do veredito da IA.
+ */
+export async function moderarPostDeTeste(
+  postId: string,
+  status: "aprovado" | "rejeitado",
+  motivo?: string,
+): Promise<void> {
+  const admin = criarAdmin();
+  const { error } = await admin
+    .from("forum_posts")
+    .update({
+      status,
+      motivo_rejeicao: status === "rejeitado" ? (motivo ?? null) : null,
+    })
+    .eq("id", postId);
+  if (error) {
+    throw new Error(`Falha ao moderar post de teste: ${error.message}`);
+  }
+}
+
 /**
  * Aluno selecionado mas SEM conta — pro spec exercitar o /primeiro-acesso.
  * Devolve a matrícula gerada pelo banco.
