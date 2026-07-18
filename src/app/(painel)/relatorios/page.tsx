@@ -197,6 +197,24 @@ export default async function RelatoriosPage({
             visitasPeriodo={metricas.visitas_periodo}
           />
         ) : null}
+
+        <p className="text-xs text-slate-400">
+          Exportar CSV:{" "}
+          <a
+            href={`/relatorios/exportar?tipo=origens&dias=${dias}`}
+            className="underline transition hover:text-brand-900 dark:hover:text-brand-100"
+          >
+            origens do tráfego
+          </a>{" "}
+          ·{" "}
+          <a
+            href={`/relatorios/exportar?tipo=serie&dias=${dias}`}
+            className="underline transition hover:text-brand-900 dark:hover:text-brand-100"
+          >
+            série diária
+          </a>{" "}
+          — abre direto no Excel/planilha.
+        </p>
       </div>
     </main>
   );
