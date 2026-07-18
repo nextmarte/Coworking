@@ -3,6 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   criarAlunoAtivado,
   criarMembroEquipe,
+  edicaoForumDisponivel,
   emailDeTeste,
   forumDisponivel,
   moderarPostDeTeste,
@@ -220,5 +221,53 @@ test.describe("fórum com moderação prévia", () => {
         .getByText("está em análise")
         .or(page.getByRole("button", { name: /Útil/ }).first()),
     ).toBeVisible({ timeout: 60_000 });
+  });
+
+  test("autor apaga a própria publicação", async ({ page }) => {
+    const titulo = `Post e2e pra apagar ${Date.now()}`;
+    await page.goto("/forum/novo");
+    await page.fill("#post-titulo", titulo);
+    await page.fill("#post-corpo", SPAM.corpo);
+    await page.getByRole("button", { name: "Publicar" }).click();
+    await page.waitForURL(/\/forum\/[0-9a-f-]+/, { timeout: 60_000 });
+
+    await page.getByRole("button", { name: "Apagar", exact: true }).click();
+    await page
+      .getByRole("button", { name: /Confirmar: apagar publicação/ })
+      .click();
+    await page.waitForURL(/\/forum$/, { timeout: 15_000 });
+    await expect(page.getByText(titulo)).toHaveCount(0);
+  });
+
+  test("edição salva com a tag (editado)", async ({ browser }) => {
+    test.skip(
+      !(await edicaoForumDisponivel()),
+      "Migração 0017 (edição do fórum) ainda não aplicada no Supabase.",
+    );
+    // Equipe edita sem passar pela IA — determinístico.
+    const email = emailDeTeste("forum-editor");
+    const senha = `E2e!${Date.now()}`;
+    await criarMembroEquipe(email, senha, "monitor", ["moderar_forum"]);
+    const contexto = await browser.newContext({
+      storageState: { cookies: [], origins: [] },
+    });
+    const pagina = await contexto.newPage();
+    await logarNumaNovaSessao(pagina, email, senha);
+
+    await pagina.goto("/forum/novo");
+    await pagina.fill("#post-titulo", `Aviso e2e original ${Date.now()}`);
+    await pagina.fill("#post-corpo", "Texto original do aviso.");
+    await pagina.getByRole("button", { name: "Publicar" }).click();
+    await pagina.waitForURL(/\/forum\/[0-9a-f-]+/, { timeout: 30_000 });
+
+    await pagina.getByRole("button", { name: "Editar", exact: true }).click();
+    await pagina.fill('textarea[name="corpo"]', "Texto corrigido do aviso.");
+    await pagina.getByRole("button", { name: "Salvar edição" }).click();
+    await expect(pagina.getByText("Texto corrigido do aviso.")).toBeVisible({
+      timeout: 15_000,
+    });
+    await expect(pagina.getByText("(editado)")).toBeVisible();
+
+    await contexto.close();
   });
 });
