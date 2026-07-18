@@ -5,6 +5,7 @@ import {
   PainelMetricas,
   resolverDias,
 } from "@/components/painel/painel-metricas";
+import { CardSaudeForum } from "@/components/painel/card-saude-forum";
 
 export const metadata: Metadata = { title: "Relatórios — CSMG" };
 
@@ -22,12 +23,13 @@ export default async function RelatoriosMasterPage({
   const metricas = await obterMetricas(dias);
 
   return (
-    <div className="animate-aparecer">
+    <div className="animate-aparecer space-y-6">
       <PainelMetricas
         metricas={metricas}
         dias={dias}
         basePath="/master/relatorios"
       />
+      <CardSaudeForum />
     </div>
   );
 }
