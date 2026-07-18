@@ -48,6 +48,13 @@ export default async function AlunoLayout({
           </Link>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/forum"
+              data-tour="forum"
+              className="text-sm font-medium text-slate-600 transition hover:text-brand-900 dark:text-slate-300 dark:hover:text-brand-100"
+            >
+              Fórum
+            </Link>
             {ehEquipe ? (
               <Link
                 href="/master"

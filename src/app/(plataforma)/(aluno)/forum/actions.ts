@@ -176,7 +176,8 @@ export async function criarResposta(
     return { error: "Não foi possível enviar a resposta." };
   }
 
-  const disciplina = post.disciplinas as { titulo: string } | null;
+  // A relação vem sem tipo do supabase-js — objeto único por FK.
+  const disciplina = post.disciplinas as unknown as { titulo: string } | null;
   const veredito = await moderarConteudo({
     titulo: `Resposta em: ${post.titulo}`,
     corpo,
