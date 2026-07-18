@@ -4,11 +4,12 @@ import { notFound } from "next/navigation";
 import { exigirAluno } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
+  autoresComPerfil,
   contagensDosPosts,
-  nomesDosAutores,
   votosDaEnquete,
   votosDasRespostas,
 } from "@/lib/forum/dados";
+import { Avatar } from "@/components/perfil/avatar";
 import { BadgeSolucao, BadgeStatus, BadgeTipo } from "@/components/forum/badges";
 import { BotaoUtil } from "@/components/forum/botao-util";
 import { Enquete, type OpcaoEnquete } from "@/components/forum/enquete";
@@ -78,9 +79,9 @@ export default async function PostPage({
   const listaRespostas = respostas ?? [];
   const respostaIds = listaRespostas.map((r) => r.id);
 
-  const [nomes, votosRespostas, votosEnquete, meusVotosRespostas, contagens] =
+  const [autores, votosRespostas, votosEnquete, meusVotosRespostas, contagens] =
     await Promise.all([
-      nomesDosAutores([post.autor_id, ...listaRespostas.map((r) => r.autor_id)]),
+      autoresComPerfil([post.autor_id, ...listaRespostas.map((r) => r.autor_id)]),
       votosDasRespostas(respostaIds),
       post.tipo === "enquete" ? votosDaEnquete(post.id) : Promise.resolve(new Map()),
       respostaIds.length > 0
@@ -169,8 +170,20 @@ export default async function PostPage({
         <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
           {post.titulo}
         </h1>
-        <p className="mt-1 text-xs text-slate-400">
-          {nomes.get(post.autor_id)} · {dataHora(post.created_at)}
+        <p className="mt-2 flex items-center gap-2 text-xs text-slate-400">
+          <Avatar
+            id={post.autor_id}
+            nome={autores.get(post.autor_id)?.nome ?? "Aluno(a)"}
+            avatarUrl={autores.get(post.autor_id)?.avatarUrl ?? null}
+            tamanho="sm"
+          />
+          <Link
+            href={`/perfil/${post.autor_id}`}
+            className="font-medium text-slate-500 underline-offset-2 hover:underline"
+          >
+            {autores.get(post.autor_id)?.nome}
+          </Link>
+          · {dataHora(post.created_at)}
         </p>
         {post.corpo ? (
           <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
@@ -230,9 +243,19 @@ export default async function PostPage({
                           status={r.status as "pendente" | "aprovado" | "rejeitado"}
                         />
                       ) : null}
-                      <span>
-                        {nomes.get(r.autor_id)} · {dataHora(r.created_at)}
-                      </span>
+                      <Avatar
+                        id={r.autor_id}
+                        nome={autores.get(r.autor_id)?.nome ?? "Aluno(a)"}
+                        avatarUrl={autores.get(r.autor_id)?.avatarUrl ?? null}
+                        tamanho="sm"
+                      />
+                      <Link
+                        href={`/perfil/${r.autor_id}`}
+                        className="font-medium text-slate-500 underline-offset-2 hover:underline"
+                      >
+                        {autores.get(r.autor_id)?.nome}
+                      </Link>
+                      <span>· {dataHora(r.created_at)}</span>
                     </div>
                     {minha && r.status === "rejeitado" && r.motivo_rejeicao ? (
                       <p className="mt-1 text-xs text-red-600">

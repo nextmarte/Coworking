@@ -25,6 +25,32 @@ export async function nomesDosAutores(
   return nomes;
 }
 
+export type AutorPerfil = { nome: string; avatarUrl: string | null };
+
+/** Nome + foto de perfil de cada autor (uma query de perfis pro lote). */
+export async function autoresComPerfil(
+  ids: string[],
+): Promise<Map<string, AutorPerfil>> {
+  const unicos = [...new Set(ids)];
+  const admin = createSupabaseAdminClient();
+  const [nomes, perfis] = await Promise.all([
+    nomesDosAutores(unicos),
+    admin.from("perfis").select("aluno_id, avatar_url").in("aluno_id", unicos),
+  ]);
+  const fotos = new Map(
+    (perfis.data ?? []).map((p) => [
+      p.aluno_id as string,
+      (p.avatar_url as string | null) ?? null,
+    ]),
+  );
+  return new Map(
+    unicos.map((id) => [
+      id,
+      { nome: nomes.get(id) ?? "Aluno(a)", avatarUrl: fotos.get(id) ?? null },
+    ]),
+  );
+}
+
 export type ContagemPost = { votos: number; respostas: number };
 
 /** Votos "útil" e respostas aprovadas por post. */

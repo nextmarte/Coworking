@@ -3,7 +3,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { exigirAluno, getSessaoEquipe } from "@/lib/auth";
 import { podeVerComoAluno } from "@/lib/permissoes";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { logout } from "@/app/(plataforma)/actions";
+import { Avatar } from "@/components/perfil/avatar";
 import { Patrocinadores } from "@/components/patrocinadores";
 import { TemaToggle } from "@/components/ui/tema-toggle";
 import { SomToggle } from "@/components/ui/som-toggle";
@@ -26,6 +28,14 @@ export default async function AlunoLayout({
     user.email ??
     "Aluno(a)";
   const primeiroNome = nome.split(" ")[0];
+  // Foto do perfil pro header (antes da migração 0016 a query só falha e o
+  // avatar cai nas iniciais).
+  const supabase = await createSupabaseServerClient();
+  const { data: perfil } = await supabase
+    .from("perfis")
+    .select("avatar_url")
+    .eq("aluno_id", user.id)
+    .maybeSingle();
 
   return (
     <ContextoIAProvider>
@@ -67,9 +77,22 @@ export default async function AlunoLayout({
                 Área do Master
               </Link>
             ) : null}
-            <span className="hidden text-sm text-slate-600 sm:block">
-              Olá, {primeiroNome}
-            </span>
+            <Link
+              href="/perfil"
+              data-tour="perfil"
+              title="Meu perfil"
+              className="flex items-center gap-2"
+            >
+              <Avatar
+                id={user.id}
+                nome={nome}
+                avatarUrl={perfil?.avatar_url ?? null}
+                tamanho="sm"
+              />
+              <span className="hidden text-sm text-slate-600 sm:block">
+                {primeiroNome}
+              </span>
+            </Link>
             <BotaoTour perfil="aluno" />
             <SomToggle />
             <TemaToggle />

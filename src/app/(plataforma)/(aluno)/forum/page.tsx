@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { exigirAluno } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { contagensDosPosts, nomesDosAutores } from "@/lib/forum/dados";
+import { autoresComPerfil, contagensDosPosts } from "@/lib/forum/dados";
 import { BadgeStatus, BadgeTipo } from "@/components/forum/badges";
+import { Avatar } from "@/components/perfil/avatar";
 import { Comunidade } from "@/components/ilustracoes";
 
 export const metadata: Metadata = { title: "Fórum — CSMG" };
@@ -75,9 +76,9 @@ export default async function ForumPage({
     ]);
 
   const lista = posts ?? [];
-  const [contagens, nomes] = await Promise.all([
+  const [contagens, autores] = await Promise.all([
     contagensDosPosts(lista.map((p) => p.id)),
-    nomesDosAutores(lista.map((p) => p.autor_id)),
+    autoresComPerfil(lista.map((p) => p.autor_id)),
   ]);
 
   let ordenados = [...lista];
@@ -227,9 +228,16 @@ export default async function ForumPage({
                   <h2 className="mt-1.5 font-medium text-brand-900 dark:text-brand-100">
                     {p.titulo}
                   </h2>
-                  <p className="mt-1 text-xs text-slate-400">
-                    {nomes.get(p.autor_id)} · {dataCurta(p.created_at)} ·{" "}
-                    {c.votos} útil · {c.respostas} resposta(s)
+                  <p className="mt-1.5 flex items-center gap-1.5 text-xs text-slate-400">
+                    <Avatar
+                      id={p.autor_id}
+                      nome={autores.get(p.autor_id)?.nome ?? "Aluno(a)"}
+                      avatarUrl={autores.get(p.autor_id)?.avatarUrl ?? null}
+                      tamanho="sm"
+                    />
+                    {autores.get(p.autor_id)?.nome} ·{" "}
+                    {dataCurta(p.created_at)} · {c.votos} útil · {c.respostas}{" "}
+                    resposta(s)
                   </p>
                 </Link>
               </li>
