@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { exigirVisaoAluno } from "@/lib/auth";
@@ -11,6 +10,7 @@ import { AbasDisciplina } from "@/components/ava/abas-disciplina";
 import { QuizForm } from "@/components/ava/quiz-form";
 import { ChatIA } from "@/components/ava/chat-ia";
 import { NavSequencial } from "@/components/ava/nav-sequencial";
+import { Trilha } from "@/components/ui/trilha";
 import { vizinhasDe } from "@/lib/navegacao-curso";
 
 type Params = { modulo: string; disciplina: string };
@@ -249,12 +249,13 @@ export default async function DisciplinaPage({
 
   return (
     <div className="animate-aparecer">
-      <Link
-        href={`/modulos/${moduloSlug}`}
-        className="text-sm text-brand-600 transition hover:text-brand-700"
-      >
-        ← {modulo.titulo}
-      </Link>
+      <Trilha
+        itens={[
+          { titulo: "Meus módulos", href: "/painel" },
+          { titulo: modulo.titulo, href: `/modulos/${moduloSlug}` },
+          { titulo: disciplina.titulo },
+        ]}
+      />
 
       <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
         {disciplina.titulo}

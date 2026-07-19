@@ -1,6 +1,6 @@
 import { FormAcao } from "@/components/ui/form-acao";
 import type { AcaoState } from "@/lib/acao";
-import Link from "next/link";
+import { Trilha } from "@/components/ui/trilha";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { exigirPermissao } from "@/lib/auth";
@@ -49,10 +49,18 @@ export default async function DisciplinaMasterPage({
 
   const { data: disciplina } = await admin
     .from("disciplinas")
-    .select("id, modulo_id, titulo, descricao, publicado")
+    .select("id, modulo_id, titulo, descricao, publicado, modulos(titulo)")
     .eq("id", id)
     .maybeSingle();
   if (!disciplina) notFound();
+  // O supabase-js tipa a relação aninhada como array; em FK many-to-one o
+  // runtime devolve objeto. Aceita os dois formatos.
+  const rel = disciplina.modulos as
+    | { titulo: string }
+    | { titulo: string }[]
+    | null;
+  const moduloTitulo =
+    (Array.isArray(rel) ? rel[0]?.titulo : rel?.titulo) ?? "Módulo";
 
   const [
     { data: aulas },
@@ -144,12 +152,16 @@ export default async function DisciplinaMasterPage({
   return (
     <div className="animate-aparecer space-y-8">
       <div>
-        <Link
-          href={`/master/modulos/${disciplina.modulo_id}`}
-          className="text-sm text-brand-600 transition hover:text-brand-700"
-        >
-          ← Voltar ao módulo
-        </Link>
+        <Trilha
+          itens={[
+            { titulo: "Módulos", href: "/master" },
+            {
+              titulo: moduloTitulo,
+              href: `/master/modulos/${disciplina.modulo_id}`,
+            },
+            { titulo: disciplina.titulo },
+          ]}
+        />
         <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
           {disciplina.titulo}
         </h1>
