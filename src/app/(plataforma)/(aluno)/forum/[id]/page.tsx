@@ -18,6 +18,10 @@ import {
 } from "@/components/forum/badges";
 import { BotaoUtil } from "@/components/forum/botao-util";
 import { Enquete, type OpcaoEnquete } from "@/components/forum/enquete";
+import {
+  ApagarPublicacao,
+  EditarPublicacao,
+} from "@/components/forum/editar-publicacao";
 import { FormReenviar } from "@/components/forum/form-reenviar";
 import { FormResposta } from "@/components/forum/form-resposta";
 import { MarcarSolucao } from "@/components/forum/marcar-solucao";
@@ -82,6 +86,27 @@ export default async function PostPage({
     ]);
 
   const listaRespostas = respostas ?? [];
+
+  // Marcações "(editado)" em queries separadas best-effort: antes da
+  // migração 0017 a coluna não existe e estas consultas só falham em
+  // silêncio — a página segue sem a tag.
+  const [{ data: edicaoPost }, { data: edicoesRespostas }] = await Promise.all([
+    supabase
+      .from("forum_posts")
+      .select("editado_em")
+      .eq("id", post.id)
+      .maybeSingle(),
+    supabase
+      .from("forum_respostas")
+      .select("id, editado_em")
+      .eq("post_id", post.id),
+  ]);
+  const postEditado = Boolean(edicaoPost?.editado_em);
+  const respostasEditadas = new Set(
+    (edicoesRespostas ?? [])
+      .filter((r) => r.editado_em)
+      .map((r) => r.id as string),
+  );
   const respostaIds = listaRespostas.map((r) => r.id);
 
   const [autores, votosRespostas, votosEnquete, meusVotosRespostas, contagens] =
@@ -190,11 +215,24 @@ export default async function PostPage({
           </Link>
           {autores.get(post.autor_id)?.equipe ? <BadgeEquipe /> : null}
           · {dataHora(post.created_at)}
+          {postEditado ? (
+            <span className="italic text-slate-400">(editado)</span>
+          ) : null}
         </p>
         {post.corpo ? (
           <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
             {post.corpo}
           </p>
+        ) : null}
+        {souAutor && post.status !== "rejeitado" ? (
+          <div className="mt-4 flex flex-wrap items-start gap-2">
+            <EditarPublicacao
+              postId={post.id}
+              titulo={post.titulo}
+              corpo={post.corpo}
+            />
+            <ApagarPublicacao postId={post.id} />
+          </div>
         ) : null}
 
         {post.tipo === "enquete" && aprovado ? (
@@ -263,6 +301,9 @@ export default async function PostPage({
                       </Link>
                       {autores.get(r.autor_id)?.equipe ? <BadgeEquipe /> : null}
                       <span>· {dataHora(r.created_at)}</span>
+                      {respostasEditadas.has(r.id) ? (
+                        <span className="italic text-slate-400">(editado)</span>
+                      ) : null}
                     </div>
                     {minha && r.status === "rejeitado" && r.motivo_rejeicao ? (
                       <p className="mt-1 text-xs text-red-600">
@@ -282,6 +323,19 @@ export default async function PostPage({
                         />
                         {souAutor && !ehSolucao ? (
                           <MarcarSolucao postId={post.id} respostaId={r.id} />
+                        ) : null}
+                        {minha ? (
+                          <>
+                            <EditarPublicacao
+                              postId={post.id}
+                              respostaId={r.id}
+                              corpo={r.corpo}
+                            />
+                            <ApagarPublicacao
+                              postId={post.id}
+                              respostaId={r.id}
+                            />
+                          </>
                         ) : null}
                       </div>
                     ) : null}

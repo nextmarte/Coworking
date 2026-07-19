@@ -117,6 +117,16 @@ export async function perfilDisponivel(): Promise<boolean> {
   return !error;
 }
 
+/** true se a migração 0017 (edição do fórum) já foi aplicada no banco. */
+export async function edicaoForumDisponivel(): Promise<boolean> {
+  const admin = criarAdmin();
+  const { error } = await admin
+    .from("forum_posts")
+    .select("editado_em")
+    .limit(1);
+  return !error;
+}
+
 /** true se a migração 0015 (fórum) já foi aplicada no banco. */
 export async function forumDisponivel(): Promise<boolean> {
   const admin = criarAdmin();

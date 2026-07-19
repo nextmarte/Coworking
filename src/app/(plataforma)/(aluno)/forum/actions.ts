@@ -216,6 +216,190 @@ export async function criarResposta(
 }
 
 /**
+ * Edição do próprio post (aprovado ou pendente). Aluno re-passa pela IA na
+ * hora: aprovada, o texto novo entra com a tag "editado"; recusada, NADA
+ * muda (o texto antigo continua no ar) — sem brecha de editar pra spam
+ * depois de aprovado. Equipe edita direto. Rejeitado usa o reenviarPost.
+ */
+export async function editarPost(
+  _prev: ForumState,
+  formData: FormData,
+): Promise<ForumState> {
+  const aluno = await exigirAluno();
+  const postId = String(formData.get("postId") ?? "");
+  const titulo = String(formData.get("titulo") ?? "").trim();
+  const corpo = String(formData.get("corpo") ?? "").trim() || null;
+  if (!postId) return { error: "Post inválido." };
+
+  const admin = createSupabaseAdminClient();
+  const { data: post } = await admin
+    .from("forum_posts")
+    .select("autor_id, status, tipo, disciplinas ( titulo )")
+    .eq("id", postId)
+    .single();
+  if (!post || post.autor_id !== aluno.id) {
+    return { error: "Post não encontrado." };
+  }
+  if (post.status === "rejeitado") {
+    return { error: "Post rejeitado usa o reenvio pra moderação." };
+  }
+
+  const tipo = post.tipo as "duvida" | "enquete";
+  // Só título/corpo são editáveis (opções de enquete já votadas não mudam);
+  // as opções placeholder satisfazem a validação sem tocá-las.
+  const invalido = validarPost({ tipo, titulo, corpo, opcoes: ["-", "-"] });
+  if (invalido) return { error: invalido };
+
+  const ehEquipe = (await getSessaoEquipe()) !== null;
+  if (!ehEquipe) {
+    const disciplina = post.disciplinas as unknown as { titulo: string } | null;
+    const veredito = await moderarConteudo({
+      titulo,
+      corpo,
+      disciplinaTitulo: disciplina?.titulo ?? null,
+    });
+    if (veredito.veredito === "suspeito") {
+      return {
+        error: `A edição não foi aprovada pela moderação: ${veredito.motivo}. O texto anterior foi mantido.`,
+      };
+    }
+    if (veredito.veredito === "erro") {
+      return {
+        error: "Moderação indisponível agora — tente editar de novo em instantes.",
+      };
+    }
+  }
+
+  const { error } = await admin
+    .from("forum_posts")
+    .update({
+      titulo,
+      corpo,
+      editado_em: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", postId);
+  if (error) return { error: "Não foi possível salvar a edição." };
+
+  revalidatePath(`/forum/${postId}`);
+  revalidatePath("/forum");
+  return undefined;
+}
+
+/** Edição da própria resposta — mesmas regras do post. */
+export async function editarResposta(
+  _prev: ForumState,
+  formData: FormData,
+): Promise<ForumState> {
+  const aluno = await exigirAluno();
+  const respostaId = String(formData.get("respostaId") ?? "");
+  const postId = String(formData.get("postId") ?? "");
+  const corpo = String(formData.get("corpo") ?? "").trim();
+  if (!respostaId || !postId) return { error: "Resposta inválida." };
+  const invalido = validarResposta(corpo);
+  if (invalido) return { error: invalido };
+
+  const admin = createSupabaseAdminClient();
+  const { data: resposta } = await admin
+    .from("forum_respostas")
+    .select("autor_id, status, forum_posts ( titulo )")
+    .eq("id", respostaId)
+    .single();
+  if (!resposta || resposta.autor_id !== aluno.id) {
+    return { error: "Resposta não encontrada." };
+  }
+  if (resposta.status === "rejeitado") {
+    return { error: "Resposta rejeitada não é editável." };
+  }
+
+  const ehEquipe = (await getSessaoEquipe()) !== null;
+  if (!ehEquipe) {
+    const postPai = resposta.forum_posts as unknown as {
+      titulo: string;
+    } | null;
+    const veredito = await moderarConteudo({
+      titulo: `Resposta em: ${postPai?.titulo ?? "publicação do fórum"}`,
+      corpo,
+    });
+    if (veredito.veredito === "suspeito") {
+      return {
+        error: `A edição não foi aprovada pela moderação: ${veredito.motivo}. O texto anterior foi mantido.`,
+      };
+    }
+    if (veredito.veredito === "erro") {
+      return {
+        error: "Moderação indisponível agora — tente editar de novo em instantes.",
+      };
+    }
+  }
+
+  const { error } = await admin
+    .from("forum_respostas")
+    .update({ corpo, editado_em: new Date().toISOString() })
+    .eq("id", respostaId);
+  if (error) return { error: "Não foi possível salvar a edição." };
+
+  revalidatePath(`/forum/${postId}`);
+  return undefined;
+}
+
+/** Apaga o próprio post (respostas e votos caem junto, em cascata). */
+export async function apagarPost(
+  _prev: ForumState,
+  formData: FormData,
+): Promise<ForumState> {
+  const aluno = await exigirAluno();
+  const postId = String(formData.get("postId") ?? "");
+  if (!postId) return { error: "Post inválido." };
+
+  const admin = createSupabaseAdminClient();
+  const { data: post } = await admin
+    .from("forum_posts")
+    .select("autor_id")
+    .eq("id", postId)
+    .single();
+  if (!post || post.autor_id !== aluno.id) {
+    return { error: "Post não encontrado." };
+  }
+
+  const { error } = await admin.from("forum_posts").delete().eq("id", postId);
+  if (error) return { error: "Não foi possível apagar a publicação." };
+
+  revalidatePath("/forum");
+  redirect("/forum");
+}
+
+/** Apaga a própria resposta (se era a solução, o post volta a ficar sem). */
+export async function apagarResposta(
+  _prev: ForumState,
+  formData: FormData,
+): Promise<ForumState> {
+  const aluno = await exigirAluno();
+  const respostaId = String(formData.get("respostaId") ?? "");
+  const postId = String(formData.get("postId") ?? "");
+  if (!respostaId) return { error: "Resposta inválida." };
+
+  const admin = createSupabaseAdminClient();
+  const { data: resposta } = await admin
+    .from("forum_respostas")
+    .select("autor_id")
+    .eq("id", respostaId)
+    .single();
+  if (!resposta || resposta.autor_id !== aluno.id) {
+    return { error: "Resposta não encontrada." };
+  }
+
+  const { error } = await admin
+    .from("forum_respostas")
+    .delete()
+    .eq("id", respostaId);
+  if (error) return { error: "Não foi possível apagar a resposta." };
+
+  if (postId) revalidatePath(`/forum/${postId}`);
+  return undefined;
+}
+
+/**
  * Recurso do autor: edita um post rejeitado e reenvia pra moderação —
  * volta a pendente e passa pela IA de novo. Escrita via service_role
  * (aluno não tem policy de update), com a autoria checada aqui.
