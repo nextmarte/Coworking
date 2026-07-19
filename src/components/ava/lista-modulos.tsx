@@ -40,6 +40,10 @@ function Capa({
         src={modulo.capaUrl}
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
+        width={960}
+        height={548}
         className={`${className} object-cover ${modulo.publicado ? "" : "grayscale"}`}
       />
     );
