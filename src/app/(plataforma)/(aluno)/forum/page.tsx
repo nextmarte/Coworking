@@ -8,7 +8,7 @@ import { BadgeEquipe, BadgeStatus, BadgeTipo } from "@/components/forum/badges";
 import { Avatar } from "@/components/perfil/avatar";
 import { Comunidade } from "@/components/ilustracoes";
 
-export const metadata: Metadata = { title: "Fórum — CSMG" };
+export const metadata: Metadata = { title: "Fórum de dúvidas — CSMG" };
 export const dynamic = "force-dynamic";
 
 const ORDENS = [
@@ -113,7 +113,7 @@ export default async function ForumPage({
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
-            Fórum
+            Fórum de dúvidas
           </h1>
           <p className="mt-1 text-sm text-slate-500">
             Tire dúvidas, abra enquetes e ajude colegas.

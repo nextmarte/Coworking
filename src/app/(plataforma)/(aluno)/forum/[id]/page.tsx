@@ -27,7 +27,7 @@ import { FormReenviar } from "@/components/forum/form-reenviar";
 import { FormResposta } from "@/components/forum/form-resposta";
 import { MarcarSolucao } from "@/components/forum/marcar-solucao";
 
-export const metadata: Metadata = { title: "Fórum — CSMG" };
+export const metadata: Metadata = { title: "Fórum de dúvidas — CSMG" };
 export const dynamic = "force-dynamic";
 
 function dataHora(iso: string): string {

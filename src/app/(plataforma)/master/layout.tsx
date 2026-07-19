@@ -24,7 +24,7 @@ export default async function MasterLayout({
   if (temPermissao(sessao, "ver_relatorios"))
     abas.push({ href: "/master/relatorios", rotulo: "Relatórios" });
   if (temPermissao(sessao, "moderar_forum"))
-    abas.push({ href: "/master/forum", rotulo: "Fórum" });
+    abas.push({ href: "/master/forum", rotulo: "Fórum de dúvidas" });
   if (sessao?.nivel === "admin")
     abas.push({ href: "/master/equipe", rotulo: "Equipe" });
 

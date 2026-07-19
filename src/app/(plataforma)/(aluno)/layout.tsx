@@ -64,7 +64,7 @@ export default async function AlunoLayout({
                 href="/forum"
                 className="text-sm font-medium text-slate-600 transition hover:text-brand-900 dark:text-slate-300 dark:hover:text-brand-100"
               >
-                Fórum
+                Fórum de dúvidas
               </Link>
             </span>
             {ehEquipe ? (

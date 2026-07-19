@@ -41,7 +41,7 @@ test.describe("níveis de acesso da equipe", () => {
     // …mas o fórum (comunidade) fica aberto pra toda a equipe.
     await page.goto("/forum");
     await expect(
-      page.getByRole("heading", { name: "Fórum", exact: true }),
+      page.getByRole("heading", { name: "Fórum de dúvidas", exact: true }),
     ).toBeVisible();
 
     // Acesso direto à gestão de equipe idem.
