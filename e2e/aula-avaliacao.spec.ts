@@ -1,10 +1,30 @@
 import { expect, test } from "@playwright/test";
+import { criarAdmin } from "./helpers/dados";
 
 // Jornada do aluno na disciplina do seed demo (migration 0006): abre a aula,
 // marca como assistida e passa na avaliação com o gabarito conhecido.
 test.use({ storageState: "e2e/.auth/aluno.json" });
 
+// O módulo demo pode ser removido em produção (conteúdo real no lugar);
+// sem ele não há gabarito estável — os testes pulam com aviso.
+let seedPresente = false;
+test.beforeAll(async () => {
+  const { data } = await criarAdmin()
+    .from("modulos")
+    .select("id")
+    .eq("slug", "fundamentos")
+    .maybeSingle();
+  seedPresente = Boolean(data);
+});
+
 test.describe("aula e avaliação", () => {
+  test.beforeEach(() => {
+    test.skip(
+      !seedPresente,
+      "Módulo demo 'fundamentos' (seed 0006) não existe neste ambiente.",
+    );
+  });
+
   test("marca aula como assistida", async ({ page }) => {
     await page.goto("/modulos/fundamentos/introducao");
 
