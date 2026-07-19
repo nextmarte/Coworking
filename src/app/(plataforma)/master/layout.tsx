@@ -25,10 +25,11 @@ export default async function MasterLayout({
     abas.push({ href: "/master/relatorios", rotulo: "Relatórios" });
   if (temPermissao(sessao, "moderar_forum"))
     abas.push({ href: "/master/forum", rotulo: "Fórum de dúvidas" });
-  if (sessao?.nivel === "admin")
+  if (sessao?.nivel === "admin") {
+    abas.push({ href: "/master/alunos", rotulo: "Alunos" });
     abas.push({ href: "/master/equipe", rotulo: "Equipe" });
-  if (sessao?.nivel === "admin")
     abas.push({ href: "/master/emails", rotulo: "E-mails" });
+  }
 
   return (
     <ContextoIAProvider>

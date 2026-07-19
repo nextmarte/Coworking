@@ -3,9 +3,7 @@ import { exigirAdmin } from "@/lib/auth";
 import { lerSessaoEquipe, type Permissao } from "@/lib/permissoes";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { FormCadastrarMonitor } from "@/components/master/form-cadastrar-monitor";
-import { FormCadastrarAluno } from "@/components/master/form-cadastrar-aluno";
 import { LinhaMonitor } from "@/components/master/linha-monitor";
-import { LinhaAluno } from "@/components/master/linha-aluno";
 
 export const metadata: Metadata = { title: "Equipe — CSMG" };
 export const dynamic = "force-dynamic";
@@ -18,27 +16,11 @@ type MembroEquipe = {
   permissoes: Permissao[];
 };
 
-type Inscricao = {
-  id: string;
-  nome: string;
-  email: string;
-  matricula: string;
-  ativado_em: string | null;
-};
-
 export default async function EquipePage() {
   await exigirAdmin();
   const admin = createSupabaseAdminClient();
 
-  const [{ data: lista }, { data: inscricoes }] = await Promise.all([
-    admin.auth.admin.listUsers({ perPage: 1000 }),
-    admin
-      .from("inscricoes")
-      .select("id, nome, email, matricula, ativado_em")
-      .order("created_at", { ascending: false })
-      .limit(200)
-      .returns<Inscricao[]>(),
-  ]);
+  const { data: lista } = await admin.auth.admin.listUsers({ perPage: 1000 });
 
   const equipe: MembroEquipe[] = (lista?.users ?? [])
     .map((u) => {
@@ -83,46 +65,6 @@ export default async function EquipePage() {
             </h2>
             <div className="mt-3 rounded-xl border border-slate-200 bg-superficie p-4 shadow-sm">
               <FormCadastrarMonitor />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h2 className="font-display text-2xl font-bold tracking-tight text-brand-900 dark:text-brand-100">
-          Alunos
-        </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Cadastro manual: o aluno recebe a matrícula por e-mail e ativa a
-          conta no primeiro acesso, definindo a própria senha.
-        </p>
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_320px]">
-          <div className="rounded-xl border border-slate-200 bg-superficie p-4 shadow-sm">
-            {(inscricoes ?? []).length === 0 ? (
-              <p className="py-4 text-sm text-slate-500">
-                Nenhuma inscrição ainda.
-              </p>
-            ) : (
-              <ul>
-                {(inscricoes ?? []).map((i) => (
-                  <LinhaAluno
-                    key={i.id}
-                    id={i.id}
-                    nome={i.nome}
-                    email={i.email}
-                    matricula={i.matricula}
-                    ativado={i.ativado_em !== null}
-                  />
-                ))}
-              </ul>
-            )}
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-              Novo aluno
-            </h3>
-            <div className="mt-3 rounded-xl border border-slate-200 bg-superficie p-4 shadow-sm">
-              <FormCadastrarAluno />
             </div>
           </div>
         </div>
