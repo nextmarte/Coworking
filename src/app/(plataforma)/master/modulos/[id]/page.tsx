@@ -29,10 +29,12 @@ export default async function ModuloMasterPage({
 
   const { data: modulo } = await admin
     .from("modulos")
-    .select("id, titulo, descricao, instrutor, publicado")
+    // "*" para tolerar ambientes sem a migration 0018 (capa_url).
+    .select("*")
     .eq("id", id)
     .maybeSingle();
   if (!modulo) notFound();
+  const capaAtual = (modulo as { capa_url?: string | null }).capa_url ?? null;
 
   const { data: disciplinas } = await admin
     .from("disciplinas")
@@ -145,6 +147,29 @@ export default async function ModuloMasterPage({
                   defaultValue={modulo.descricao ?? ""}
                   className={inputClass}
                 />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">
+                  Capa do módulo
+                </label>
+                {capaAtual ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={capaAtual}
+                    alt="Capa atual do módulo"
+                    className="mb-2 aspect-video w-full max-w-xs rounded-lg border border-slate-200 object-cover"
+                  />
+                ) : null}
+                <input
+                  type="file"
+                  name="capa"
+                  accept="image/*"
+                  className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-brand-700 hover:file:bg-brand-100"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  JPG/PNG/WebP até 5 MB. Aparece como thumbnail na lista de
+                  módulos do aluno.
+                </p>
               </div>
               <label className="flex items-center gap-2 text-sm text-slate-700">
                 <input

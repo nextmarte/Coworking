@@ -121,6 +121,34 @@ export async function criarModulo(
   redirect(`/master/modulos/${data.id}`);
 }
 
+/** Sobe a capa pro bucket público e devolve a URL (ou um erro legível). */
+async function subirCapaModulo(
+  admin: Admin,
+  moduloId: string,
+  capa: File,
+): Promise<{ url: string } | { error: string }> {
+  if (!capa.type.startsWith("image/")) {
+    return { error: "A capa precisa ser uma imagem (JPG, PNG ou WebP)." };
+  }
+  if (capa.size > 5 * 1024 * 1024) {
+    return { error: "A capa pode ter no máximo 5 MB." };
+  }
+  const ext = (capa.name.split(".").pop() ?? "jpg")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+  // Nome estável por módulo: trocar a capa substitui o arquivo antigo.
+  const path = `capas/${moduloId}.${ext || "jpg"}`;
+  const { error } = await admin.storage
+    .from("materiais")
+    .upload(path, Buffer.from(await capa.arrayBuffer()), {
+      contentType: capa.type,
+      upsert: true,
+    });
+  if (error) return { error: "Não foi possível enviar a capa." };
+  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/materiais/${path}`;
+  return { url };
+}
+
 export async function atualizarModulo(
   _prev: AcaoState,
   formData: FormData,
@@ -133,16 +161,28 @@ export async function atualizarModulo(
   const titulo = String(formData.get("titulo") ?? "").trim();
   if (!titulo) return { error: "Dê um título ao módulo." };
 
-  const { error } = await admin
-    .from("modulos")
-    .update({
-      titulo,
-      descricao: String(formData.get("descricao") ?? "").trim() || null,
-      instrutor: String(formData.get("instrutor") ?? "").trim() || null,
-      publicado: formData.get("publicado") === "on",
-    })
-    .eq("id", id);
-  if (error) return { error: "Não foi possível salvar o módulo." };
+  const dados: Record<string, unknown> = {
+    titulo,
+    descricao: String(formData.get("descricao") ?? "").trim() || null,
+    instrutor: String(formData.get("instrutor") ?? "").trim() || null,
+    publicado: formData.get("publicado") === "on",
+  };
+
+  const capa = formData.get("capa");
+  if (capa instanceof File && capa.size > 0) {
+    const resultado = await subirCapaModulo(admin, id, capa);
+    if ("error" in resultado) return resultado;
+    dados.capa_url = `${resultado.url}?v=${Date.now()}`;
+  }
+
+  const { error } = await admin.from("modulos").update(dados).eq("id", id);
+  if (error) {
+    return {
+      error: dados.capa_url
+        ? "Não foi possível salvar — a migração 0018 (capa dos módulos) já foi aplicada no Supabase?"
+        : "Não foi possível salvar o módulo.",
+    };
+  }
 
   revalidatePath(`/master/modulos/${id}`);
   revalidatePath("/master");
