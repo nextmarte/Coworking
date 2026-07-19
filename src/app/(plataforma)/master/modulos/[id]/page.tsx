@@ -1,4 +1,5 @@
 import { FormAcao } from "@/components/ui/form-acao";
+import { BotaoVoltar } from "@/components/ui/botao-voltar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -41,12 +42,7 @@ export default async function ModuloMasterPage({
 
   return (
     <div className="animate-aparecer">
-      <Link
-        href="/master"
-        className="text-sm text-brand-600 transition hover:text-brand-700"
-      >
-        ← Módulos
-      </Link>
+      <BotaoVoltar href="/master">Módulos</BotaoVoltar>
 
       <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">{modulo.titulo}</h1>
 

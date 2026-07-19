@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BotaoVoltar } from "@/components/ui/botao-voltar";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
@@ -93,12 +93,7 @@ export default function PrivacidadePage() {
         </Secao>
 
         <div className="border-t border-slate-200 pt-6 dark:border-slate-700">
-          <Link
-            href="/"
-            className="text-sm font-medium text-brand-700 underline-offset-4 hover:underline dark:text-brand-300"
-          >
-            ← Voltar para a página inicial
-          </Link>
+          <BotaoVoltar href="/">Voltar para a página inicial</BotaoVoltar>
         </div>
       </div>
     </main>

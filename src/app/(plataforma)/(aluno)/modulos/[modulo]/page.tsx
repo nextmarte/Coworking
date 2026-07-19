@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { BotaoVoltar } from "@/components/ui/botao-voltar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { resumo } from "@/lib/progresso";
 import { BarraProgresso } from "@/components/ui/barra-progresso";
@@ -73,12 +74,7 @@ export default async function ModuloPage({
 
   return (
     <div className="animate-aparecer">
-      <Link
-        href="/painel"
-        className="text-sm text-brand-600 transition hover:text-brand-700"
-      >
-        ← Meus módulos
-      </Link>
+      <BotaoVoltar href="/painel">Meus módulos</BotaoVoltar>
 
       <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">{modulo.titulo}</h1>
       {modulo.instrutor ? (

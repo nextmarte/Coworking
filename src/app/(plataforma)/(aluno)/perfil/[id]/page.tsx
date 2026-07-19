@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BotaoVoltar } from "@/components/ui/botao-voltar";
 import { exigirAluno } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -55,12 +56,7 @@ export default async function PerfilPublicoPage({
 
   return (
     <main className="animate-aparecer mx-auto w-full max-w-2xl flex-1 px-6 py-8">
-      <Link
-        href="/forum"
-        className="text-sm text-slate-500 transition hover:text-brand-900 dark:hover:text-brand-100"
-      >
-        ← Voltar ao fórum
-      </Link>
+      <BotaoVoltar href="/forum">Voltar ao fórum</BotaoVoltar>
 
       <section className="mt-4 rounded-xl border border-slate-200 bg-superficie p-6 shadow-sm">
         <div className="flex flex-wrap items-center gap-5">
