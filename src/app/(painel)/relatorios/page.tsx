@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { painelAutenticado } from "@/lib/painel-auth";
 import { obterMetricas } from "@/lib/metricas";
 import { sairPainel } from "@/app/(painel)/actions";
@@ -43,11 +44,15 @@ export default async function RelatoriosPage({
     <main className="flex flex-1 flex-col bg-background">
       <header className="border-b border-slate-200 bg-superficie">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-3">
-          <div>
+          <Link
+            href="/"
+            title="Ir para o site"
+            className="rounded-lg transition hover:opacity-80"
+          >
             <h1 className="text-sm font-semibold text-brand-900 dark:text-brand-100">
               CSMG <span className="font-normal text-slate-400">· Painel</span>
             </h1>
-          </div>
+          </Link>
           <div className="flex items-center gap-3">
             <TemaToggle />
             <form action={sairPainel}>

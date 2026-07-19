@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AuthShell } from "@/components/auth/auth-shell";
+import { BotaoVoltar } from "@/components/ui/botao-voltar";
 import { DefinirSenhaForm } from "@/components/auth/definir-senha-form";
 
 export const metadata: Metadata = {
@@ -24,6 +25,9 @@ export default async function DefinirSenhaPage({
         tokenHash={parametros.token_hash ?? null}
         tipo={parametros.tipo === "recovery" ? "recovery" : "invite"}
       />
+      <div className="mt-6 text-center">
+        <BotaoVoltar href="/login">Ir para o login</BotaoVoltar>
+      </div>
     </AuthShell>
   );
 }

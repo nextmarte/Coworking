@@ -66,7 +66,7 @@ export default function Home() {
           className="pointer-events-none absolute -right-20 -top-28 h-[34rem] w-[34rem] opacity-[0.12] sm:opacity-[0.16]"
         />
         <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 pt-8 text-white">
-          <div className="group flex items-center gap-3">
+          <Link href="/" className="group flex items-center gap-3">
             <span className="flex h-12 w-12 flex-none items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/20">
               <Image
                 src="/logo-roda.svg"
@@ -88,7 +88,7 @@ export default function Home() {
                 Prefeitura e SEIM/Integra Rio · Oroborus
               </p>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-4">
             <span className="hidden text-xs text-brand-100/70 sm:block">
               Acesso gratuito à comunidade
