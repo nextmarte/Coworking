@@ -1,6 +1,7 @@
 import "server-only";
 
 import nodemailer from "nodemailer";
+import { urlDaPlataforma } from "@/lib/urls";
 
 let transporter: ReturnType<typeof nodemailer.createTransport> | null = null;
 
@@ -55,8 +56,7 @@ export async function enviarEmailConviteAluno(dados: {
   matricula: string;
 }) {
   const remetente = process.env.GMAIL_USER;
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://coworkingsocial.com.br";
+  const app = urlDaPlataforma();
 
   await getTransporter().sendMail({
     from: `"Coworking Social" <${remetente}>`,
@@ -68,8 +68,10 @@ export async function enviarEmailConviteAluno(dados: {
       Globais.</p>
       <p>Sua matrícula é: <strong>${dados.matricula}</strong></p>
       <p>Para ativar sua conta e escolher sua senha, acesse:
-      <a href="${site}/primeiro-acesso">${site}/primeiro-acesso</a>
+      <a href="${app}/primeiro-acesso">${app}/primeiro-acesso</a>
       e informe seu e-mail e o número de matrícula acima.</p>
+      <p>Depois disso, seu acesso à plataforma é sempre por
+      <a href="${app}/login">${app}/login</a>.</p>
     `,
   });
 }
@@ -96,6 +98,8 @@ export async function enviarEmailConviteMonitor(dados: {
       <p>Para ativar sua conta e escolher sua senha, use este link (válido
       por 24 horas e de uso único):</p>
       <p><a href="${dados.linkConvite}">Ativar minha conta</a></p>
+      <p>Depois disso, seu acesso à plataforma é sempre por
+      <a href="${urlDaPlataforma()}/login">${urlDaPlataforma()}/login</a>.</p>
       <p>Se você não esperava este convite, ignore este e-mail.</p>
     `,
   });

@@ -5,6 +5,7 @@ import "server-only";
 
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { enviarEmailForum } from "@/lib/email";
+import { urlDaPlataforma } from "@/lib/urls";
 
 async function dadosDoUsuario(
   id: string,
@@ -22,10 +23,9 @@ async function dadosDoUsuario(
 }
 
 function linkDoPost(postId: string): string {
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://coworkingsocial.com.br";
-  return `${site}/forum/${postId}`;
+  return `${urlDaPlataforma()}/forum/${postId}`;
 }
+
 
 /** Avisa o autor que a publicação saiu da análise e está no ar. */
 export async function notificarPostAprovado(postId: string): Promise<void> {

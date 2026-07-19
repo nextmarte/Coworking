@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import {
   cadastrarMonitor,
   type EquipeState,
@@ -20,9 +20,36 @@ export function MensagemEquipe({ state }: { state: EquipeState }) {
     );
   }
   return (
-    <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-      {state.ok}
-    </p>
+    <div className="space-y-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+      <p>{state.ok}</p>
+      {state.link ? <CampoLinkConvite link={state.link} /> : null}
+    </div>
+  );
+}
+
+/** Link direto do convite, pronto pra copiar e mandar por qualquer canal. */
+function CampoLinkConvite({ link }: { link: string }) {
+  const [copiado, setCopiado] = useState(false);
+  return (
+    <div className="flex items-center gap-1.5">
+      <input
+        readOnly
+        value={link}
+        onFocus={(e) => e.currentTarget.select()}
+        className="w-full min-w-0 rounded-md border border-emerald-200 bg-superficie px-2 py-1 text-xs text-slate-700 dark:border-emerald-900 dark:text-slate-300"
+      />
+      <button
+        type="button"
+        onClick={async () => {
+          await navigator.clipboard.writeText(link);
+          setCopiado(true);
+          setTimeout(() => setCopiado(false), 2000);
+        }}
+        className="flex-none rounded-md border border-emerald-300 px-2.5 py-1 text-xs font-medium transition hover:bg-emerald-100 dark:border-emerald-800 dark:hover:bg-emerald-900/40"
+      >
+        {copiado ? "Copiado!" : "Copiar"}
+      </button>
+    </div>
   );
 }
 

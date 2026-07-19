@@ -18,10 +18,16 @@ import {
 } from "@/lib/email";
 import { isValidCPF, unmaskCPF } from "@/lib/cpf";
 import { isValidPhone, unmaskPhone } from "@/lib/phone";
+import { urlDaPlataforma } from "@/lib/urls";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export type EquipeState = { ok: string } | { error: string } | undefined;
+// `link` acompanha o ok pra quem cadastrou poder copiar e mandar direto
+// (WhatsApp etc.) sem depender do e-mail chegar.
+export type EquipeState =
+  | { ok: string; link?: string }
+  | { error: string }
+  | undefined;
 
 function lerPermissoesDoForm(formData: FormData): Permissao[] {
   return formData
@@ -43,9 +49,7 @@ async function montarLinkConvite(
   });
   const hash = data?.properties?.hashed_token;
   if (error || !hash) return null;
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://coworkingsocial.com.br";
-  return `${site}/definir-senha?token_hash=${hash}&tipo=recovery`;
+  return `${urlDaPlataforma()}/definir-senha?token_hash=${hash}&tipo=recovery`;
 }
 
 export async function cadastrarMonitor(
@@ -90,10 +94,11 @@ export async function cadastrarMonitor(
     await enviarEmailConviteMonitor({ nome, email, linkConvite: link });
   } catch {
     return {
-      ok: "Conta criada, mas o e-mail falhou — use o botão de reenviar.",
+      ok: "Conta criada, mas o e-mail falhou — mande o link direto abaixo.",
+      link,
     };
   }
-  return { ok: `Convite enviado pra ${email}.` };
+  return { ok: `Convite enviado pra ${email}. Se preferir, mande também o link direto:`, link };
 }
 
 export async function reenviarConviteMonitor(
@@ -118,9 +123,12 @@ export async function reenviarConviteMonitor(
       linkConvite: link,
     });
   } catch {
-    return { error: "Falha ao enviar o e-mail do convite." };
+    return {
+      ok: "O e-mail falhou, mas o link direto está aqui — mande por onde preferir:",
+      link,
+    };
   }
-  return { ok: `Convite reenviado pra ${usuario.email}.` };
+  return { ok: `Convite reenviado pra ${usuario.email}. Link direto:`, link };
 }
 
 export async function atualizarPermissoesMonitor(
@@ -211,6 +219,7 @@ export async function cadastrarAluno(
   }
 
   revalidatePath("/master/equipe");
+  const linkPrimeiroAcesso = `${urlDaPlataforma()}/primeiro-acesso`;
   try {
     await enviarEmailConviteAluno({
       nome,
@@ -219,10 +228,14 @@ export async function cadastrarAluno(
     });
   } catch {
     return {
-      ok: `Aluno cadastrado (matrícula ${data.matricula}), mas o e-mail falhou — use o reenvio.`,
+      ok: `Aluno cadastrado (matrícula ${data.matricula}), mas o e-mail falhou — mande o link direto com a matrícula:`,
+      link: linkPrimeiroAcesso,
     };
   }
-  return { ok: `Aluno cadastrado — convite enviado pra ${email}.` };
+  return {
+    ok: `Aluno cadastrado (matrícula ${data.matricula}) — convite enviado pra ${email}. Link direto do primeiro acesso:`,
+    link: linkPrimeiroAcesso,
+  };
 }
 
 export async function reenviarConviteAluno(
