@@ -53,7 +53,7 @@ export default async function EquipePage() {
           Administradores têm acesso total; monitores só ao que for concedido
           aqui.
         </p>
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_320px]">
+        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
           <ul className="space-y-3">
             {equipe.map((m) => (
               <LinhaMonitor key={m.id} {...m} />

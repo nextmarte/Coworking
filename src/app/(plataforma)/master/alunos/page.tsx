@@ -76,7 +76,7 @@ export default async function AlunosMasterPage({
         convites. O disparo em massa fica na aba E-mails.
       </p>
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_320px]">
+      <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         <div>
           <form action="/master/alunos" className="flex gap-2">
             <input
@@ -84,7 +84,7 @@ export default async function AlunosMasterPage({
               name="q"
               defaultValue={termo}
               placeholder="Buscar por nome, e-mail ou matrícula…"
-              className="w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
+              className="w-full min-w-0 rounded-lg border border-slate-300 px-3.5 py-2 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
             />
             {status ? <input type="hidden" name="status" value={status} /> : null}
             <button

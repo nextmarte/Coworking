@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { exigirAdmin } from "@/lib/auth";
+import { exigirPermissao } from "@/lib/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { FormAcao } from "@/components/ui/form-acao";
 import { dispararConvites, conferirDevolucoes } from "./actions";
@@ -16,7 +16,7 @@ const BADGE: Record<string, string> = {
 };
 
 export default async function EmailsMasterPage() {
-  await exigirAdmin();
+  await exigirPermissao("gerenciar_emails");
   const admin = createSupabaseAdminClient();
 
   const [inscricoesRes, enviosRes] = await Promise.all([

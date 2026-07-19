@@ -43,7 +43,7 @@ export default async function MasterHome() {
         curso.
       </p>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
+      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         {/* Lista de módulos */}
         <div data-tour="master-modulos">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">

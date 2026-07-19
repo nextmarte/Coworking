@@ -28,9 +28,11 @@ export default async function MasterLayout({
   if (sessao?.nivel === "admin") {
     abas.push({ href: "/master/alunos", rotulo: "Alunos" });
     abas.push({ href: "/master/equipe", rotulo: "Equipe" });
-    abas.push({ href: "/master/emails", rotulo: "E-mails" });
-    abas.push({ href: "/master/eventos", rotulo: "Eventos" });
   }
+  if (temPermissao(sessao, "gerenciar_emails"))
+    abas.push({ href: "/master/emails", rotulo: "E-mails" });
+  if (sessao?.nivel === "admin")
+    abas.push({ href: "/master/eventos", rotulo: "Eventos" });
 
   return (
     <ContextoIAProvider>

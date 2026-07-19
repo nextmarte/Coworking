@@ -49,7 +49,7 @@ export default async function ModuloMasterPage({
 
       <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-brand-900 dark:text-brand-100">{modulo.titulo}</h1>
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_320px]">
+      <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         {/* Disciplinas */}
         <div>
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">

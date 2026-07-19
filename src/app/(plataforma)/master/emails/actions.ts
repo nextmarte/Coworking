@@ -1,10 +1,11 @@
 "use server";
 
-// Ações da aba E-mails — só admins. Disparo em massa, retomada de falhas e
-// checagem de devoluções, sempre com registro em envios_email.
+// Ações da aba E-mails — admin ou monitor com a permissão gerenciar_emails.
+// Disparo em massa, retomada de falhas e checagem de devoluções, sempre com
+// registro em envios_email.
 
 import { revalidatePath } from "next/cache";
-import { exigirAdmin } from "@/lib/auth";
+import { exigirPermissao } from "@/lib/auth";
 import type { AcaoState } from "@/lib/acao";
 import { liberarEDispararConvites, verificarDevolucoes } from "@/lib/convites";
 
@@ -12,7 +13,7 @@ export async function dispararConvites(
   _prev: AcaoState,
   _formData: FormData,
 ): Promise<AcaoState> {
-  await exigirAdmin();
+  await exigirPermissao("gerenciar_emails");
   try {
     const r = await liberarEDispararConvites({ apenasSemConvite: true });
     revalidatePath("/master/emails");
@@ -33,7 +34,7 @@ export async function conferirDevolucoes(
   _prev: AcaoState,
   _formData: FormData,
 ): Promise<AcaoState> {
-  await exigirAdmin();
+  await exigirPermissao("gerenciar_emails");
   try {
     const marcados = await verificarDevolucoes();
     revalidatePath("/master/emails");

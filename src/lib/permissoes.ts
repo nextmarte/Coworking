@@ -8,6 +8,7 @@ export const PERMISSOES = [
   "moderar_forum",
   "editar_conteudo",
   "ver_relatorios",
+  "gerenciar_emails",
 ] as const;
 
 export type Permissao = (typeof PERMISSOES)[number];
@@ -24,6 +25,7 @@ export const ROTULOS_PERMISSOES: Record<Permissao, string> = {
   moderar_forum: "Moderação do fórum",
   editar_conteudo: "Edição de conteúdo",
   ver_relatorios: "Ver relatórios",
+  gerenciar_emails: "E-mails e convites de acesso",
 };
 
 function ehPermissao(valor: unknown): valor is Permissao {
@@ -70,6 +72,7 @@ const ROTAS_HUB: Array<[Permissao, string]> = [
   ["editar_conteudo", "/master"],
   ["ver_relatorios", "/master/relatorios"],
   ["moderar_forum", "/master/forum"],
+  ["gerenciar_emails", "/master/emails"],
 ];
 
 /**

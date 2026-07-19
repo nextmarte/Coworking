@@ -17,7 +17,7 @@ export function NovaPublicacao({
   const [titulo, setTitulo] = useState("");
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_300px]">
       <FormPost
         disciplinas={disciplinas}
         disciplinaInicial={disciplinaInicial}
