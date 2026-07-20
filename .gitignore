@@ -55,3 +55,7 @@ prod-3000.log
 conteudo/
 capas-geradas/
 .next-nova/
+
+
+# log do disparo de convites (contém e-mails de alunos — nunca commitar)
+disparo-lancamento.log
