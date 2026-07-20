@@ -61,17 +61,34 @@ export async function enviarEmailConviteAluno(dados: {
   await getTransporter().sendMail({
     from: `"Coworking Social" <${remetente}>`,
     to: dados.email,
-    subject: "Seu acesso à plataforma CSMG",
+    subject: "Chegou a hora! Seu acesso à plataforma CSMG está liberado",
     html: `
       <p>Olá, ${dados.nome}!</p>
-      <p>Você foi cadastrado na plataforma do Coworking Social de Mudanças
-      Globais.</p>
-      <p>Sua matrícula é: <strong>${dados.matricula}</strong></p>
-      <p>Para ativar sua conta e escolher sua senha, acesse:
-      <a href="${app}/primeiro-acesso">${app}/primeiro-acesso</a>
-      e informe seu e-mail e o número de matrícula acima.</p>
-      <p>Depois disso, seu acesso à plataforma é sempre por
-      <a href="${app}/login">${app}/login</a>.</p>
+      <p>A 1ª turma do curso de mentoria do <strong>Coworking Social de
+      Mudanças Globais</strong> começou — e o seu acesso está liberado.
+      <strong>As primeiras aulas já estão disponíveis</strong> na plataforma:
+      a apresentação do curso e as mentorias de Empreendedorismo com Legado
+      Cultural, Empreender com Organização e Contabilidade e Noções
+      Financeiras. Os demais módulos serão liberados ao longo das próximas
+      semanas.</p>
+      <p><strong>Para entrar (leva 1 minuto):</strong></p>
+      <ol>
+        <li>Acesse <a href="${app}/primeiro-acesso">${app}/primeiro-acesso</a></li>
+        <li>Informe este e-mail e sua matrícula: <strong>${dados.matricula}</strong></li>
+        <li>Crie sua senha — e pronto, você cai direto nas aulas.</li>
+      </ol>
+      <p>Depois disso, seu acesso é sempre por
+      <a href="${app}/login">${app}/login</a> (guarde este e-mail: a matrícula
+      é o seu número de identificação no curso).</p>
+      <p><strong>O que te espera lá dentro:</strong> videoaulas dos
+      professores, e-books pra baixar, avaliações pra acompanhar seu
+      progresso, um fórum de dúvidas com a turma e um assistente de IA
+      disponível a qualquer hora pra te ajudar com o conteúdo. E nas manhãs
+      de aula (9h às 12h), os monitores do curso respondem ao vivo pelo
+      fórum.</p>
+      <p>Qualquer dificuldade pra entrar, é só responder este e-mail.</p>
+      <p>Bons estudos!<br/>Equipe CSMG · Coworking Social de Mudanças
+      Globais</p>
     `,
   });
 }
