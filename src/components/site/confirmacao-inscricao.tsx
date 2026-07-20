@@ -6,6 +6,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AvisoSpam } from "@/components/ui/aviso-spam";
 
 export const CHAVE_MATRICULA = "csmg-matricula";
 
@@ -50,6 +51,9 @@ export function ConfirmacaoInscricao() {
           Sua matrícula foi enviada pro seu e-mail.
         </p>
       )}
+      <div className="mt-5">
+        <AvisoSpam titulo="Não achou o e-mail em alguns minutos?" />
+      </div>
       <Link
         href="/"
         className="mt-6 inline-block text-sm font-medium text-brand-700 underline-offset-4 transition hover:underline dark:text-brand-300"
