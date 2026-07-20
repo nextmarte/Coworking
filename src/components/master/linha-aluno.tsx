@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import {
   reenviarConviteAluno,
@@ -28,9 +29,12 @@ export function LinhaAluno({
   return (
     <li className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 py-2.5 text-sm last:border-0">
       <div className="min-w-0">
-        <p className="truncate font-medium text-brand-900 dark:text-brand-100">
+        <Link
+          href={`/master/alunos/${id}`}
+          className="block truncate font-medium text-brand-900 underline-offset-4 transition hover:text-brand-700 hover:underline dark:text-brand-100 dark:hover:text-brand-300"
+        >
           {nome}
-        </p>
+        </Link>
         <p className="truncate text-xs text-slate-500">
           {email} · matrícula {matricula}
         </p>

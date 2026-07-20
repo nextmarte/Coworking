@@ -1,6 +1,7 @@
 // Relatório "Turma": desempenho e avanço dos alunos no curso. Busca tudo
 // via service_role (área restrita por ver_relatorios) e agrega com a lógica
 // pura de lib/relatorios-turma.
+import Link from "next/link";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import {
   avancoPorDisciplina,
@@ -45,6 +46,7 @@ export async function DesempenhoTurma() {
     postsRes,
     respostasRes,
     avaliacoesRes,
+    inscricoesRes,
   ] = await Promise.all([
     admin.auth.admin.listUsers({ perPage: 1000 }),
     admin.from("modulos").select("id, titulo, publicado"),
@@ -67,7 +69,16 @@ export async function DesempenhoTurma() {
       .select("disciplina_id, estrelas, comentario, created_at")
       .order("created_at", { ascending: false })
       .limit(200),
+    // Vínculo pro detalhe do aluno (/master/alunos/[id]) — casa por e-mail.
+    admin.from("inscricoes").select("id, email"),
   ]);
+
+  const inscricaoPorEmail = new Map(
+    (inscricoesRes.data ?? []).map((i) => [
+      (i.email as string).toLowerCase(),
+      i.id as string,
+    ]),
+  );
 
   // Alunos = contas que não são da equipe nem internas/de teste.
   const alunos = (usuariosRes.data?.users ?? [])
@@ -294,9 +305,18 @@ export async function DesempenhoTurma() {
               {linhas.map((a) => (
                 <tr key={a.id} className="border-b border-slate-100 last:border-0">
                   <td className="max-w-56 px-4 py-2">
-                    <p className="truncate font-medium text-brand-900 dark:text-brand-100">
-                      {a.nome}
-                    </p>
+                    {inscricaoPorEmail.has(a.email.toLowerCase()) ? (
+                      <Link
+                        href={`/master/alunos/${inscricaoPorEmail.get(a.email.toLowerCase())}`}
+                        className="block truncate font-medium text-brand-900 underline-offset-4 transition hover:text-brand-700 hover:underline dark:text-brand-100 dark:hover:text-brand-300"
+                      >
+                        {a.nome}
+                      </Link>
+                    ) : (
+                      <p className="truncate font-medium text-brand-900 dark:text-brand-100">
+                        {a.nome}
+                      </p>
+                    )}
                     <p className="truncate text-xs text-slate-500">{a.email}</p>
                   </td>
                   <td className="whitespace-nowrap px-4 py-2 text-slate-600 dark:text-slate-300">

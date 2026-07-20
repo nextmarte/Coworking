@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   avancoPorDisciplina,
+  desempenhoDoAluno,
   linhasDosAlunos,
   resumoGeral,
   type DadosTurma,
@@ -79,6 +80,48 @@ describe("linhasDosAlunos", () => {
     expect(primeira.ultimoLogin).toBe("2026-07-20T10:00:00Z");
     expect(segunda.nome).toBe("Bia");
     expect(segunda.ultimoLogin).toBeNull();
+  });
+});
+
+describe("desempenhoDoAluno", () => {
+  it("resume o aluno e abre o avanço por disciplina", () => {
+    const ana = desempenhoDoAluno(dados, "ana");
+    expect(ana.resumo).toMatchObject({
+      aulasVistas: 3,
+      totalAulas: 3,
+      avancoPct: 100,
+      quizzesAprovados: 1,
+      quizzesTentados: 1,
+      notaMedia: 90,
+      participacoesForum: 2,
+      ultimoLogin: "2026-07-20T10:00:00Z",
+    });
+    const [d1, d2] = ana.porDisciplina;
+    expect(d1).toMatchObject({
+      disciplina: "Legado",
+      aulasVistas: 2,
+      totalAulas: 2,
+      quiz: { nota: 90, aprovado: true, tentativas: 2 },
+    });
+    expect(d2).toMatchObject({
+      disciplina: "Organização",
+      aulasVistas: 1,
+      totalAulas: 1,
+      quiz: null,
+    });
+  });
+
+  it("aluno sem atividade sai zerado, sem quebrar", () => {
+    const bia = desempenhoDoAluno(dados, "bia");
+    expect(bia.resumo.aulasVistas).toBe(1);
+    expect(bia.resumo.quizzesAprovados).toBe(0);
+    expect(bia.resumo.notaMedia).toBe(40);
+    expect(bia.resumo.ultimoLogin).toBeNull();
+
+    const ninguem = desempenhoDoAluno(dados, "nao-existe");
+    expect(ninguem.resumo.aulasVistas).toBe(0);
+    expect(ninguem.resumo.notaMedia).toBeNull();
+    expect(ninguem.resumo.avancoPct).toBe(0);
   });
 });
 

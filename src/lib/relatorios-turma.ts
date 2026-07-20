@@ -139,6 +139,67 @@ export function resumoFeedback(avaliacoes: AvaliacaoDisciplina[]) {
   return saida;
 }
 
+/** Visão de um aluno só: resumo geral + avanço disciplina a disciplina. */
+export function desempenhoDoAluno(dados: DadosTurma, alunoId: string) {
+  const vistas = new Set(
+    dados.progresso.filter((p) => p.aluno_id === alunoId).map((p) => p.aula_id),
+  );
+  const melhor = melhoresTentativas(dados);
+  const tentativasPorQuiz = new Map<string, number>();
+  for (const t of dados.tentativas) {
+    if (t.aluno_id !== alunoId) continue;
+    tentativasPorQuiz.set(
+      t.quiz_id,
+      (tentativasPorQuiz.get(t.quiz_id) ?? 0) + 1,
+    );
+  }
+
+  const porDisciplina = [...dados.disciplinas]
+    .sort((a, b) => a.ordem - b.ordem)
+    .map((d) => {
+      const resultado = d.quizId
+        ? (melhor.get(`${alunoId}:${d.quizId}`) ?? null)
+        : null;
+      return {
+        id: d.id,
+        disciplina: d.titulo,
+        modulo: d.modulo,
+        aulasVistas: d.aulas.filter((a) => vistas.has(a)).length,
+        totalAulas: d.aulas.length,
+        quiz: resultado
+          ? { ...resultado, tentativas: tentativasPorQuiz.get(d.quizId!) ?? 0 }
+          : null,
+      };
+    });
+
+  const totalAulas = porDisciplina.reduce((acc, d) => acc + d.totalAulas, 0);
+  const resultados = porDisciplina
+    .map((d) => d.quiz)
+    .filter((q): q is NonNullable<typeof q> => Boolean(q));
+
+  return {
+    resumo: {
+      aulasVistas: vistas.size,
+      totalAulas,
+      avancoPct: pct(vistas.size, totalAulas),
+      quizzesAprovados: resultados.filter((r) => r.aprovado).length,
+      quizzesTentados: resultados.length,
+      notaMedia:
+        resultados.length === 0
+          ? null
+          : Math.round(
+              resultados.reduce((acc, r) => acc + r.nota, 0) /
+                resultados.length,
+            ),
+      participacoesForum: dados.participacoesForum.filter(
+        (p) => p.autor_id === alunoId,
+      ).length,
+      ultimoLogin: dados.ultimoLoginPorAluno[alunoId] ?? null,
+    },
+    porDisciplina,
+  };
+}
+
 export function linhasDosAlunos(dados: DadosTurma) {
   const vistas = aulasVistasPorAluno(dados);
   const melhor = melhoresTentativas(dados);
